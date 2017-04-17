@@ -1,10 +1,14 @@
 ﻿
 class SimpleGame {
 
-    constructor() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { preload: this.preload, create: this.create, update: this.update });
+    constructor(width, height) {
+        this.w = width;
+        this.h = height;
+        this.game = new Phaser.Game(width, height, Phaser.AUTO, 'content', { preload: this.preload, create: this.create, update: this.update });
     }
 
+    w: number;
+    h: number;
     game: Phaser.Game;
     platforms: Phaser.Group;
     player: Phaser.Sprite;
@@ -18,16 +22,17 @@ class SimpleGame {
     }
 
     create() {
+        this.game.stage.backgroundColor = "#51E898";
         //  We're going to be using physics, so enable the Arcade Physics system
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        //  A simple background for our game
-        this.game.add.sprite(0, 0, 'sky');
+               
         //  The platforms group contains the ground and the 2 ledges we can jump on
         this.platforms = this.game.add.group();
         //  We will enable physics for any object that is created in this group
         this.platforms.enableBody = true;
         // Here we create the ground.
-        var ground = this.platforms.create(0, this.game.world.height - 64, 'ground');
+        //var ground = this.platforms.create(0, this.game.world.height - 64, 'ground');
+        var ground = this.platforms.create(this.w, this.game.world.height - 64, 'ground');
         //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
         ground.scale.setTo(2, 2);
         //  This stops it from falling away when you jump on it
@@ -91,6 +96,8 @@ class SimpleGame {
 
 window.onload = () => {
 
-    var game = new SimpleGame();
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var game = new SimpleGame(w, h);
 
 };
