@@ -1,0 +1,3 @@
+3 pocs
+1 - fazer o multitoc com phaser
+2 - por em dois lados(instancias) e ver funcionando o multitoc na proxima mesa
