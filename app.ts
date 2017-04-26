@@ -32,6 +32,11 @@ class SimpleGame {
         var h = (this.game.world.height / 2) - 128; // 128
 
         this.box = this.game.add.sprite(w, h, 'box');
+        this.box.inputEnabled = true;
+        this.box.events.onInputDown.add(function() {            
+            this.shakeBox();
+        }, this);
+
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
         this.counter = 0;
