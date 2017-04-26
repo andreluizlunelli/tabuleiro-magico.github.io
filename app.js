@@ -3,7 +3,6 @@ var SimpleGame = (function () {
     function SimpleGame(width, height) {
         this.w = width;
         this.h = height;
-        //this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", { preload: this.preload, create: this.create, update: this.update, render: this.render });
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
     }
     SimpleGame.prototype.preload = function () {
@@ -20,6 +19,11 @@ var SimpleGame = (function () {
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.counter = 0;
         this.step = Math.PI * 2 / 360;
+        this.game.input.addPointer();
+        this.game.input.addPointer();
+        this.game.input.addPointer();
+        this.game.input.addPointer();
+        this.game.input.addPointer();
         //this.game.add.tween(this.box).to( { x:this.box.x+20 }, 200, null, true, 0).to( { x:this.box.x }, 200, null, true, 3, 3);      
         //this.shakeBox(this);
     };
@@ -34,7 +38,7 @@ var SimpleGame = (function () {
         */
         if (this.cursors.down.isDown) {
             //this.game.stage.backgroundColor = "#000000";    
-            this.minhafuncao();
+            this.shakeBox();
             //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
             //  The 3000 tells it to wait for 3 seconds before starting the fade back.
             //this.tween.yoyo(true, 3000);
@@ -42,13 +46,22 @@ var SimpleGame = (function () {
     };
     SimpleGame.prototype.render = function () {
         this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        this.game.debug.pointer(this.game.input.mousePointer);
+        this.game.debug.pointer(this.game.input.pointer1);
+        this.game.debug.pointer(this.game.input.pointer2);
+        this.game.debug.pointer(this.game.input.pointer3);
+        this.game.debug.pointer(this.game.input.pointer4);
+        this.game.debug.pointer(this.game.input.pointer5);
+        this.game.debug.pointer(this.game.input.pointer6);
+        this.game.debug.pointer(this.game.input.pointer7);
+        this.game.debug.pointer(this.game.input.pointer8);
     };
-    SimpleGame.prototype.minhafuncao = function () {
-        console.log('entrou minhafuncao');
-    };
-    SimpleGame.prototype.shakeBox = function (that) {
-        var _x = that.box.x;
-        that.game.add.tween(that.box).to({ x: that.box.x + 20 }, 200, null, true, 0).to({ x: _x }, 200, null, true, 3, 3);
+    SimpleGame.prototype.shakeBox = function () {
+        this.game.add.tween(this.box)
+            .to({ x: this.box.x + 10 }, 100, null, true, 0)
+            .to({ x: this.box.x - 10 }, 100, null, true, 0)
+            .to({ x: this.box.x + 10 }, 100, null, true, 0)
+            .to({ x: this.box.x - 10 }, 100, null, true, 0);
     };
     return SimpleGame;
 }());
