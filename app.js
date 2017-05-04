@@ -69,10 +69,50 @@ var SimpleGame = (function () {
     };
     return SimpleGame;
 }());
+var ManagerGames = (function () {
+    function ManagerGames(numInstances, w, h) {
+        this.list = [];
+        if (numInstances < 1 || numInstances > 4) {
+            alert("Numero de instâncias simultâneas é de 1 à 4");
+        }
+        this.numInstances = numInstances;
+        this.w = w;
+        this.h = h;
+    }
+    ManagerGames.prototype.start = function () {
+        switch (this.numInstances) {
+            case 1:
+                this.list.push(new SimpleGame(this.w, this.h));
+                break;
+            case 2:
+                this.list.push(new SimpleGame(this.w / 2, this.h));
+                this.list.push(new SimpleGame(this.w / 2, this.h));
+                break;
+            case 3:
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                break;
+            case 4:
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                break;
+            default:
+                alert("valor inválido");
+                break;
+        }
+    };
+    return ManagerGames;
+}());
 window.onload = function () {
+    var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");
+    var _int = +i;
     var w = window.innerWidth;
     var h = window.innerHeight;
-    var game = new SimpleGame(w, h);
+    var mg = new ManagerGames(_int, w, h);
+    mg.start();
 };
 function wiggle(aProgress, aPeriod1, aPeriod2) {
     var current1 = aProgress * Math.PI * 2 * aPeriod1;
