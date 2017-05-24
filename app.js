@@ -1,21 +1,23 @@
 /// <reference path="typescript/phaser.d.ts" />
+// <reference path="node_modules/phaser-input/build/phaser-input.d.ts" />
 var SimpleGame = (function () {
     function SimpleGame(width, height) {
         this.w = width;
         this.h = height;
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
+        //this.game.plugins.add(Fabrique.Plugins.InputField);
     }
     SimpleGame.prototype.preload = function () {
-        this.game.load.image("box", "assets/box.png");
+        this.game.load.image("background", "assets/background.png");
     };
     SimpleGame.prototype.create = function () {
-        this.game.stage.backgroundColor = "#51E898";
+        this.game.stage.backgroundColor = "#0b5546";
         //  We're going to be using physics, so enable the Arcade Physics system
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        // tamanho box 256x256
-        var w = (this.game.world.width / 2) - 128; // 128
-        var h = (this.game.world.height / 2) - 128; // 128
-        this.box = this.game.add.sprite(w, h, 'box');
+        // tamanho background 500x700
+        var w = (this.game.world.width / 2) - 350; // 128
+        var h = (this.game.world.height / 2) - 225; // 128
+        this.box = this.game.add.sprite(w, h, 'background');
         this.box.inputEnabled = true;
         this.box.events.onInputDown.add(function () {
             this.shakeBox();
@@ -28,7 +30,8 @@ var SimpleGame = (function () {
         this.game.input.addPointer();
         this.game.input.addPointer();
         this.game.input.addPointer();
-        //this.game.add.tween(this.box).to( { x:this.box.x+20 }, 200, null, true, 0).to( { x:this.box.x }, 200, null, true, 3, 3);      
+        //this.game.add.inputField(10, 90);
+        //this.game.add.tween(this.box).to( { x:this.box.x+20 }, 200, null, true, 0).to( { x:this.box.x }, 200, null, true, 3, 3);
         //this.shakeBox(this);
     };
     SimpleGame.prototype.update = function () {
@@ -41,7 +44,7 @@ var SimpleGame = (function () {
         this.counter += this.step ;
         */
         if (this.cursors.down.isDown) {
-            //this.game.stage.backgroundColor = "#000000";    
+            //this.game.stage.backgroundColor = "#000000";
             this.shakeBox();
             //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
             //  The 3000 tells it to wait for 3 seconds before starting the fade back.
