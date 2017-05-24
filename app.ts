@@ -5,7 +5,7 @@ class SimpleGame {
     constructor(width: number, height: number, mirror: boolean) {
         this.w = width;
         this.h = height;        
-        this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
+        this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);        
         this.mirror = mirror;
     }
 
@@ -63,10 +63,26 @@ class SimpleGame {
             g.x = 500;
 
             this.d = g.create(100, 300, 'content');
-            //this.d.anchor.setTo(0, 0);
+            this.d.anchor.setTo(0, 0);
 
-            this.d.angle = 90;
+            this.d.angle = 0;
             ///
+
+
+            this.game.world.setBounds(100, 100, 2000, 2000);
+
+            //this.game.camera.world.angle = 30;            
+            
+            //this.game.camera.world.centerY = 55;
+
+            //var gr2 = new Phaser.Group;
+           
+            //var b = new Phaser.Physics.Arcade.Body(this.box);
+            //b.angle = 90;
+
+
+            //gr.x = 0;
+            //gr.angle = 90;
 
 
 
@@ -106,38 +122,10 @@ class SimpleGame {
         this.game.debug.pointer(this.game.input.pointer6);
         this.game.debug.pointer(this.game.input.pointer7);
         this.game.debug.pointer(this.game.input.pointer8);
-
-
-        if (this.mirror) {
-
-            //this.game.world.rotation = 180;
-            //this.box.game.world.rotation = 180;
-            
-
-/*
-            let out = [];
-
-            let bmd = this.game.add.bitmapData(800, 600);
-            bmd.addToWorld();
-
-            let y = 0;
-
-            for (let i = 0; i < 30; i++)
-            {
-                let c = Phaser.Color.interpolateColor(0x66d973, 0x40b54d, 30, i);
-
-                // console.log(Phaser.Color.getWebRGB(c));
-
-                bmd.rect(0, y, 800, y+2, Phaser.Color.getWebRGB(c));
-
-                out.push(Phaser.Color.getWebRGB(c));
-
-                y += 2;
-            }*/
-        }
     }
 
     shakeBox() {        
+        console.log('shakeBox');
         this.game.add.tween(this.box)
         .to( { x:this.box.x+10 }, 100, null, true, 0)
         .to( { x:this.box.x-10 }, 100, null, true, 0)       
@@ -195,13 +183,15 @@ class ManagerGames {
     }
 }
 
+declare var mg: ManagerGames;
 window.onload = () => {    
-    var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");    
-    var _int = +i;
+    //var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");    
+    //var _int = +i;
+    var _int = 1;
     var w = window.innerWidth;
     var h = window.innerHeight;
-    var mg= new ManagerGames(_int, w, h);  
-        mg.start();
+    mg = new ManagerGames(_int, w, h);
+    mg.start();
 };
 
 function wiggle(aProgress: number, aPeriod1: number, aPeriod2: number): number {

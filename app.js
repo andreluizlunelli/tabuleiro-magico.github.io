@@ -1,9 +1,10 @@
 /// <reference path="typescript/phaser.d.ts" />
 var SimpleGame = (function () {
-    function SimpleGame(width, height) {
+    function SimpleGame(width, height, mirror) {
         this.w = width;
         this.h = height;
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
+        this.mirror = mirror;
     }
     SimpleGame.prototype.preload = function () {
         this.game.load.image("box", "assets/box.png");
@@ -30,6 +31,23 @@ var SimpleGame = (function () {
         this.game.input.addPointer();
         //this.game.add.tween(this.box).to( { x:this.box.x+20 }, 200, null, true, 0).to( { x:this.box.x }, 200, null, true, 3, 3);      
         //this.shakeBox(this);
+        if (this.mirror) {
+            // ISSO AQUI FUNCIONA
+            var g = this.game.add.group();
+            g.x = 500;
+            this.d = g.create(100, 300, 'content');
+            this.d.anchor.setTo(0, 0);
+            this.d.angle = 0;
+            ///
+            this.game.world.setBounds(100, 100, 2000, 2000);
+            //this.game.camera.world.angle = 30;            
+            //this.game.camera.world.centerY = 55;
+            //var gr2 = new Phaser.Group;
+            //var b = new Phaser.Physics.Arcade.Body(this.box);
+            //b.angle = 90;
+            //gr.x = 0;
+            //gr.angle = 90;
+        }
     };
     SimpleGame.prototype.update = function () {
         /*
@@ -45,7 +63,7 @@ var SimpleGame = (function () {
             this.shakeBox();
             //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
             //  The 3000 tells it to wait for 3 seconds before starting the fade back.
-            //this.tween.yoyo(true, 3000);
+            //this.tween.yoyo(true, 3000);                    
         }
     };
     SimpleGame.prototype.render = function () {
@@ -61,6 +79,7 @@ var SimpleGame = (function () {
         this.game.debug.pointer(this.game.input.pointer8);
     };
     SimpleGame.prototype.shakeBox = function () {
+        console.log('shakeBox');
         this.game.add.tween(this.box)
             .to({ x: this.box.x + 10 }, 100, null, true, 0)
             .to({ x: this.box.x - 10 }, 100, null, true, 0)
@@ -82,22 +101,22 @@ var ManagerGames = (function () {
     ManagerGames.prototype.start = function () {
         switch (this.numInstances) {
             case 1:
-                this.list.push(new SimpleGame(this.w, this.h));
+                this.list.push(new SimpleGame(this.w, this.h, true));
                 break;
             case 2:
-                this.list.push(new SimpleGame(this.w / 2, this.h));
-                this.list.push(new SimpleGame(this.w / 2, this.h));
+                //this.list.push(new SimpleGame(this.w/2, this.h));
+                //this.list.push(new SimpleGame(this.w/2, this.h));
                 break;
             case 3:
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                //this.list.push(new SimpleGame(this.w/2, this.h/2));
+                //this.list.push(new SimpleGame(this.w/2, this.h/2));
+                //this.list.push(new SimpleGame(this.w/2, this.h/2));
                 break;
             case 4:
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
-                this.list.push(new SimpleGame(this.w / 2, this.h / 2));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2, true));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2, true));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2, false));
+                this.list.push(new SimpleGame(this.w / 2, this.h / 2, false));
                 break;
             default:
                 alert("valor inválido");
@@ -107,11 +126,12 @@ var ManagerGames = (function () {
     return ManagerGames;
 }());
 window.onload = function () {
-    var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");
-    var _int = +i;
+    //var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");    
+    //var _int = +i;
+    var _int = 1;
     var w = window.innerWidth;
     var h = window.innerHeight;
-    var mg = new ManagerGames(_int, w, h);
+    mg = new ManagerGames(_int, w, h);
     mg.start();
 };
 function wiggle(aProgress, aPeriod1, aPeriod2) {
