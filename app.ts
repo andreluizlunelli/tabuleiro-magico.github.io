@@ -49,6 +49,8 @@ class SimpleGame {
         this.upa.inputEnabled = true;
         this.upa.events.onInputDown.add(function() {
             //TODO
+            
+            //text.setText("- You have clicked -\n" + count + " times !");
         }, this);
 
         this.downa = this.game.add.sprite(w, h, 'downa');
