@@ -51,8 +51,6 @@ class SimpleGame {
         this.upa.inputEnabled = true;
         this.upa.events.onInputDown.add(function() {
             //TODO
-            
-            //text.setText("- You have clicked -\n" + count + " times !"); <- vai pro metodo upload, alterar com o valor que o usuario seleciona pelas cetas
         }, this);
 
         this.downa = this.game.add.sprite(w, h, 'downa');
@@ -71,7 +69,9 @@ class SimpleGame {
     }
 
     update() {
-
+        //todo fazer o update do texto baseado em uma variavel.
+    //text.setText("- You have clicked -\n" + count + " times !"); <- vai pro metodo upload, alterar com o valor que o usuario seleciona pelas cetas
+        
         if (this.cursors.down.isDown) {
             this.shakeBox();
         }
