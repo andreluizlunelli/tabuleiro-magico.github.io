@@ -72,22 +72,8 @@ class SimpleGame {
 
     update() {
 
-        /*
-        var tStep = Math.sin( this.counter ) ;
-        this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
-        this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
-        this.box.z = this.game.world.width + tStep * 30 ;
-        this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;
-        this.counter += this.step ;
-        */
         if (this.cursors.down.isDown) {
-            //this.game.stage.backgroundColor = "#000000";
             this.shakeBox();
-
-            //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
-            //  The 3000 tells it to wait for 3 seconds before starting the fade back.
-            //this.tween.yoyo(true, 3000);
-
         }
     }
 
