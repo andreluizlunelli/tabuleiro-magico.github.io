@@ -45,12 +45,14 @@ class SimpleGame {
             this.shakeBox();
         }, this);
 
+        
+        // var text = game.add.bitmapText(400, 300, 'desyrel', 'Middle Earth', 64);       
         this.upa = this.game.add.sprite(w, h, 'upa');
         this.upa.inputEnabled = true;
         this.upa.events.onInputDown.add(function() {
             //TODO
             
-            //text.setText("- You have clicked -\n" + count + " times !");
+            //text.setText("- You have clicked -\n" + count + " times !"); <- vai pro metodo upload, alterar com o valor que o usuario seleciona pelas cetas
         }, this);
 
         this.downa = this.game.add.sprite(w, h, 'downa');
