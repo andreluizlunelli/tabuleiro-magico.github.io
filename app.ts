@@ -16,12 +16,18 @@ class SimpleGame {
     cursors: Phaser.CursorKeys;
 
     box: Phaser.Sprite;
+
+    upa: Phaser.Sprite;
+    downa: Phaser.Sprite;
+
     tween: Phaser.Tween;
     counter: number;
     step: number;
 
     preload() {
         this.game.load.image("background", "assets/background.png");
+        this.game.load.image("upa", "assets/background.png");
+        this.game.load.image("downa", "assets/background.png");
     }
 
     create() {
@@ -39,21 +45,24 @@ class SimpleGame {
             this.shakeBox();
         }, this);
 
+        this.upa = this.game.add.sprite(w, h, 'upa');
+        this.upa.inputEnabled = true;
+        this.upa.events.onInputDown.add(function() {
+            //TODO
+        }, this);
+
+        this.downa = this.game.add.sprite(w, h, 'downa');
+        this.downa.inputEnabled = true;
+        this.downa.events.onInputDown.add(function() {
+            //TODO
+        }, this);
+
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
         this.counter = 0;
         this.step = Math.PI * 2 / 360;
 
-        this.game.input.addPointer();
-        this.game.input.addPointer();
-        this.game.input.addPointer();
-        this.game.input.addPointer();
-        this.game.input.addPointer();
 
-        //this.game.add.inputField(10, 90);
-
-        //this.game.add.tween(this.box).to( { x:this.box.x+20 }, 200, null, true, 0).to( { x:this.box.x }, 200, null, true, 3, 3);
-        //this.shakeBox(this);
 
     }
 
@@ -79,17 +88,7 @@ class SimpleGame {
     }
 
     render() {
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);
-
-        this.game.debug.pointer(this.game.input.mousePointer);
-        this.game.debug.pointer(this.game.input.pointer1);
-        this.game.debug.pointer(this.game.input.pointer2);
-        this.game.debug.pointer(this.game.input.pointer3);
-        this.game.debug.pointer(this.game.input.pointer4);
-        this.game.debug.pointer(this.game.input.pointer5);
-        this.game.debug.pointer(this.game.input.pointer6);
-        this.game.debug.pointer(this.game.input.pointer7);
-        this.game.debug.pointer(this.game.input.pointer8);
+                
     }
 
     shakeBox() {
