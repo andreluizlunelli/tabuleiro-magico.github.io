@@ -143,7 +143,7 @@ class SimpleGame {
             // verifico se o numero já existe na lista dos escolhidos
             for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
                 if (inteirosJaEscolhidos[j] === randomint) {
-                    randomint = this.getRandomInt(0, qtdRodadas+1);
+                    randomint = this.getRandomInt(0, qtdRodadas);
                 }
             }
             inteirosJaEscolhidos.push(randomint);
@@ -163,13 +163,18 @@ class SimpleGame {
 
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
 
-        var w, h, x = 0;
-        var y = 200;
+        var fixedY = 100;
+        var colunaBolinhas = fixedY + 180;
+        var w, h, y = 0;
+        var y = fixedY;
+        var x = 100;
+        var espacoColunas = 45;
         let b;
+
 
         // centena
         for (var i = 0; i < centena; ++i) {
-            x = (i % 2 == 0) ? 200 : 215;
+            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas+15;
             y += 15;
 
             b = this.game.add.sprite(x, y, 'circle_blue');
@@ -178,10 +183,11 @@ class SimpleGame {
             this.centena.push( b );
         }
 
-        y = 200;
+        y = fixedY;
+        colunaBolinhas += espacoColunas; 
         // dezena
         for (var i = 0; i < dezena; ++i) {
-            x = (i % 2 == 0) ? 230 : 245;
+            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas+15;
             y += 15;
 
             b = this.game.add.sprite(x, y, 'circle_yellow');
@@ -190,10 +196,11 @@ class SimpleGame {
             this.centena.push( b );
         }
 
-        y = 200;
+        y = fixedY;
+        colunaBolinhas += espacoColunas; 
         // unidade
         for (var i = 0; i < unidade; ++i) {
-            x = (i % 2 == 0) ? 260 : 275;
+            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas+15;
             y += 15;
 
             b = this.game.add.sprite(x, y, 'circle_red');
@@ -224,18 +231,18 @@ class ManagerGames {
     start() {
         switch (this.numInstances) {
             case 1:
-                this.list.push(new SimpleGame(this.w, this.h, true));              
+                this.list.push(new SimpleGame(this.w, this.h, false));              
                 break;
             
             case 2:
-                //this.list.push(new SimpleGame(this.w/2, this.h));
-                //this.list.push(new SimpleGame(this.w/2, this.h));
+                this.list.push(new SimpleGame(this.w/2, this.h, false));
+                this.list.push(new SimpleGame(this.w/2, this.h, false));
                 break;
             
             case 3:
-                //this.list.push(new SimpleGame(this.w/2, this.h/2));
-                //this.list.push(new SimpleGame(this.w/2, this.h/2));
-                //this.list.push(new SimpleGame(this.w/2, this.h/2));
+                this.list.push(new SimpleGame(this.w/2, this.h/2, true));
+                this.list.push(new SimpleGame(this.w/2, this.h/2, true));
+                this.list.push(new SimpleGame(this.w/2, this.h/2, false));
                 break;
             
             case 4:                
@@ -257,7 +264,7 @@ declare var mg: ManagerGames;
 window.onload = () => {    
     //var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");    
     //var _int = +i;
-    var _int = 1;
+    var _int = 4;
     var w = window.innerWidth;
     var h = window.innerHeight;
     mg = new ManagerGames(_int, w, h);
