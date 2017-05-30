@@ -22,8 +22,17 @@ class SimpleGame {
 
     d: Phaser.Sprite;
 
+    centena: Array<Phaser.Sprite> = [];
+    dezena: Array<Phaser.Sprite> = [];
+    unidade: Array<Phaser.Sprite> = [];
+
+    b1:Phaser.Sprite;
+
     preload() {
         this.game.load.image("box", "assets/box.png");
+        this.game.load.image("circle_red", "assets/circle_red.svg");
+        this.game.load.image("circle_yellow", "assets/circle_yellow.svg");
+        this.game.load.image("circle_blue", "assets/circle_blue.svg");
     }
 
     create() {        
@@ -54,40 +63,23 @@ class SimpleGame {
         this.game.input.addPointer();
         this.game.input.addPointer();
 
-        //this.game.add.tween(this.box).to( { x:this.box.x+20 }, 200, null, true, 0).to( { x:this.box.x }, 200, null, true, 3, 3);      
-        //this.shakeBox(this);
+        var a = this.getRandomSetParaImprimirNaTela(2);
+        var centena = a[0][0];
+        var dezena = a[0][1];
+        var unidade = a[0][2];
+        this.criarBolinhasNaTela(centena, dezena, unidade);
 
         if (this.mirror) {
             // ISSO AQUI FUNCIONA
-            var g = this.game.add.group();
-            g.x = 500;
-
-            this.d = g.create(100, 300, 'content');
-            this.d.anchor.setTo(0, 0);
-
-            this.d.angle = 0;
-            ///
-
-
-            this.game.world.setBounds(100, 100, 2000, 2000);
-
-            //this.game.camera.world.angle = 30;            
-            
-            //this.game.camera.world.centerY = 55;
-
-            //var gr2 = new Phaser.Group;
-           
-            //var b = new Phaser.Physics.Arcade.Body(this.box);
-            //b.angle = 90;
-
-
-            //gr.x = 0;
-            //gr.angle = 90;
-
-
-
+            // var g = this.game.add.group();
+            // g.x = 500;
+            //
+            // this.d = g.create(100, 300, 'content');
+            // this.d.anchor.setTo(0, 0);
+            //
+            // this.d.angle = 0;
+            // this.game.world.setBounds(100, 100, 2000, 2000);
         }
-        
     }
 
     update() {        
@@ -133,6 +125,55 @@ class SimpleGame {
         .to( { x:this.box.x-10 }, 100, null, true, 0);      
     }
 
+    getRandomSetParaImprimirNaTela(qtdRodadas: number) {
+        var listaRetornaRandomicos = [];
+        var inteirosJaEscolhidos = [];
+        var a = [
+            [0, 1, 5]
+            , [0, 2, 2]
+            , [0, 2, 3]
+            , [0, 3, 3]
+        ];
+        if (qtdRodadas > a.length) {
+            alert("Numero de rodadas maior que o permitido");
+        }
+        for (var i = 0; i < qtdRodadas; i++) {
+            var randomint = this.getRandomInt(0, qtdRodadas);
+            // verifico se o numero já existe na lista dos escolhidos
+            for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
+                if (inteirosJaEscolhidos[j] === randomint) {
+                    randomint = this.getRandomInt(0, qtdRodadas);
+                }
+            }
+            inteirosJaEscolhidos.push(randomint);
+            var item = a[randomint];
+            listaRetornaRandomicos.push(item);
+        }
+        return listaRetornaRandomicos;
+    }
+
+    /**
+     * Returns a random integer between min (inclusive) and max (inclusive)
+     * Using Math.round() will give you a non-uniform distribution!
+     */
+    getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
+        let b1 = this.game.add.sprite(200, 200, 'circle_yellow');
+        b1.width = 15;
+        b1.height = 15;
+        let b2 = this.game.add.sprite(215, 215, 'circle_yellow');
+        b2.width = 15;
+        b2.height = 15;
+        let b3 = this.game.add.sprite(200, 230, 'circle_yellow');
+        b3.width = 15;
+        b3.height = 15;
+        let b4 = this.game.add.sprite(215, 245, 'circle_yellow');
+        b4.width = 15;
+        b4.height = 15;
+    }
 }
 
 class ManagerGames {
@@ -193,10 +234,3 @@ window.onload = () => {
     mg = new ManagerGames(_int, w, h);
     mg.start();
 };
-
-function wiggle(aProgress: number, aPeriod1: number, aPeriod2: number): number {
-            var current1: number = aProgress * Math.PI * 2 * aPeriod1;
-            var current2: number = aProgress * (Math.PI * 2 * aPeriod2 + Math.PI / 2);
-
-            return Math.sin(current1) * Math.cos(current2);
-        }
