@@ -6,7 +6,7 @@ class SimpleGame {
         this.w = width;
         this.h = height;        
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);        
-        this.mirror = mirror;
+        this.espelhar = mirror;
     }
 
     w: number;
@@ -18,15 +18,13 @@ class SimpleGame {
     tween: Phaser.Tween;
     counter: number;
     step: number;
-    mirror: boolean;
+    espelhar: boolean;
 
     d: Phaser.Sprite;
 
     centena: Array<Phaser.Sprite> = [];
     dezena: Array<Phaser.Sprite> = [];
     unidade: Array<Phaser.Sprite> = [];
-
-    b1:Phaser.Sprite;
 
     preload() {
         this.game.load.image("box", "assets/box.png");
@@ -69,7 +67,7 @@ class SimpleGame {
         var unidade = a[0][2];
         this.criarBolinhasNaTela(centena, dezena, unidade);
 
-        if (this.mirror) {
+        if (this.espelhar) { // espelhar
             // ISSO AQUI FUNCIONA
             // var g = this.game.add.group();
             // g.x = 500;
@@ -82,28 +80,28 @@ class SimpleGame {
         }
     }
 
-    update() {        
+    update() {
 
         /*
         var tStep = Math.sin( this.counter ) ;
         this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
         this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
         this.box.z = this.game.world.width + tStep * 30 ;
-        this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;               
+        this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;
         this.counter += this.step ;
         */
-        if (this.cursors.down.isDown) {                        
-            //this.game.stage.backgroundColor = "#000000";    
+        if (this.cursors.down.isDown) {
+            //this.game.stage.backgroundColor = "#000000";
             this.shakeBox();
 
             //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
             //  The 3000 tells it to wait for 3 seconds before starting the fade back.
-            //this.tween.yoyo(true, 3000);                    
+            //this.tween.yoyo(true, 3000);
         }
-    }  
+    }
 
-    render() {        
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);  
+    render() {
+        this.game.debug.cameraInfo(this.game.camera, 32, 32);
 
         this.game.debug.pointer(this.game.input.mousePointer);
         this.game.debug.pointer(this.game.input.pointer1);
@@ -116,23 +114,26 @@ class SimpleGame {
         this.game.debug.pointer(this.game.input.pointer8);
     }
 
-    shakeBox() {        
+    shakeBox() {
         console.log('shakeBox');
         this.game.add.tween(this.box)
         .to( { x:this.box.x+10 }, 100, null, true, 0)
-        .to( { x:this.box.x-10 }, 100, null, true, 0)       
+        .to( { x:this.box.x-10 }, 100, null, true, 0)
         .to( { x:this.box.x+10 }, 100, null, true, 0)
-        .to( { x:this.box.x-10 }, 100, null, true, 0);      
+        .to( { x:this.box.x-10 }, 100, null, true, 0);
     }
 
     getRandomSetParaImprimirNaTela(qtdRodadas: number) {
         var listaRetornaRandomicos = [];
         var inteirosJaEscolhidos = [];
         var a = [
-            [0, 1, 5]
-            , [0, 2, 2]
-            , [0, 2, 3]
-            , [0, 3, 3]
+            [9, 9, 9]
+            , [1, 2, 3]
+            , [4, 5, 6]
+            , [6, 2, 0]
+            , [0, 5, 5]
+            , [0, 2, 1]            
+            , [0, 1, 8]            
         ];
         if (qtdRodadas > a.length) {
             alert("Numero de rodadas maior que o permitido");
@@ -142,7 +143,7 @@ class SimpleGame {
             // verifico se o numero já existe na lista dos escolhidos
             for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
                 if (inteirosJaEscolhidos[j] === randomint) {
-                    randomint = this.getRandomInt(0, qtdRodadas);
+                    randomint = this.getRandomInt(0, qtdRodadas+1);
                 }
             }
             inteirosJaEscolhidos.push(randomint);
@@ -161,18 +162,46 @@ class SimpleGame {
     }
 
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
-        let b1 = this.game.add.sprite(200, 200, 'circle_yellow');
-        b1.width = 15;
-        b1.height = 15;
-        let b2 = this.game.add.sprite(215, 215, 'circle_yellow');
-        b2.width = 15;
-        b2.height = 15;
-        let b3 = this.game.add.sprite(200, 230, 'circle_yellow');
-        b3.width = 15;
-        b3.height = 15;
-        let b4 = this.game.add.sprite(215, 245, 'circle_yellow');
-        b4.width = 15;
-        b4.height = 15;
+
+        var w, h, x = 0;
+        var y = 200;
+        let b;
+
+        // centena
+        for (var i = 0; i < centena; ++i) {
+            x = (i % 2 == 0) ? 200 : 215;
+            y += 15;
+
+            b = this.game.add.sprite(x, y, 'circle_blue');
+            b.width = 15;
+            b.height = 15;
+            this.centena.push( b );
+        }
+
+        y = 200;
+        // dezena
+        for (var i = 0; i < dezena; ++i) {
+            x = (i % 2 == 0) ? 230 : 245;
+            y += 15;
+
+            b = this.game.add.sprite(x, y, 'circle_yellow');
+            b.width = 15;
+            b.height = 15;
+            this.centena.push( b );
+        }
+
+        y = 200;
+        // unidade
+        for (var i = 0; i < unidade; ++i) {
+            x = (i % 2 == 0) ? 260 : 275;
+            y += 15;
+
+            b = this.game.add.sprite(x, y, 'circle_red');
+            b.width = 15;
+            b.height = 15;
+            this.centena.push( b );
+        }
+
     }
 }
 

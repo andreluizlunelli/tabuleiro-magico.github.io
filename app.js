@@ -7,7 +7,7 @@ var SimpleGame = (function () {
         this.w = width;
         this.h = height;
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
-        this.mirror = mirror;
+        this.espelhar = mirror;
     }
     SimpleGame.prototype.preload = function () {
         this.game.load.image("box", "assets/box.png");
@@ -40,7 +40,7 @@ var SimpleGame = (function () {
         var dezena = a[0][1];
         var unidade = a[0][2];
         this.criarBolinhasNaTela(centena, dezena, unidade);
-        if (this.mirror) {
+        if (this.espelhar) {
             // ISSO AQUI FUNCIONA
             // var g = this.game.add.group();
             // g.x = 500;
@@ -62,11 +62,11 @@ var SimpleGame = (function () {
         this.counter += this.step ;
         */
         if (this.cursors.down.isDown) {
-            //this.game.stage.backgroundColor = "#000000";    
+            //this.game.stage.backgroundColor = "#000000";
             this.shakeBox();
             //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
             //  The 3000 tells it to wait for 3 seconds before starting the fade back.
-            //this.tween.yoyo(true, 3000);                    
+            //this.tween.yoyo(true, 3000);
         }
     };
     SimpleGame.prototype.render = function () {
@@ -93,10 +93,13 @@ var SimpleGame = (function () {
         var listaRetornaRandomicos = [];
         var inteirosJaEscolhidos = [];
         var a = [
-            [0, 1, 5],
-            [0, 2, 2],
-            [0, 2, 3],
-            [0, 3, 3]
+            [9, 9, 9],
+            [1, 2, 3],
+            [4, 5, 6],
+            [6, 2, 0],
+            [0, 5, 5],
+            [0, 2, 1],
+            [0, 1, 8]
         ];
         if (qtdRodadas > a.length) {
             alert("Numero de rodadas maior que o permitido");
@@ -106,7 +109,7 @@ var SimpleGame = (function () {
             // verifico se o numero já existe na lista dos escolhidos
             for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
                 if (inteirosJaEscolhidos[j] === randomint) {
-                    randomint = this.getRandomInt(0, qtdRodadas);
+                    randomint = this.getRandomInt(0, qtdRodadas + 1);
                 }
             }
             inteirosJaEscolhidos.push(randomint);
@@ -123,18 +126,38 @@ var SimpleGame = (function () {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
     SimpleGame.prototype.criarBolinhasNaTela = function (centena, dezena, unidade) {
-        var b1 = this.game.add.sprite(200, 200, 'circle_yellow');
-        b1.width = 15;
-        b1.height = 15;
-        var b2 = this.game.add.sprite(215, 215, 'circle_yellow');
-        b2.width = 15;
-        b2.height = 15;
-        var b3 = this.game.add.sprite(200, 230, 'circle_yellow');
-        b3.width = 15;
-        b3.height = 15;
-        var b4 = this.game.add.sprite(215, 245, 'circle_yellow');
-        b4.width = 15;
-        b4.height = 15;
+        var w, h, x = 0;
+        var y = 200;
+        var b;
+        // centena
+        for (var i = 0; i < centena; ++i) {
+            x = (i % 2 == 0) ? 200 : 215;
+            y += 15;
+            b = this.game.add.sprite(x, y, 'circle_blue');
+            b.width = 15;
+            b.height = 15;
+            this.centena.push(b);
+        }
+        y = 200;
+        // dezena
+        for (var i = 0; i < dezena; ++i) {
+            x = (i % 2 == 0) ? 230 : 245;
+            y += 15;
+            b = this.game.add.sprite(x, y, 'circle_yellow');
+            b.width = 15;
+            b.height = 15;
+            this.centena.push(b);
+        }
+        y = 200;
+        // unidade
+        for (var i = 0; i < unidade; ++i) {
+            x = (i % 2 == 0) ? 260 : 275;
+            y += 15;
+            b = this.game.add.sprite(x, y, 'circle_red');
+            b.width = 15;
+            b.height = 15;
+            this.centena.push(b);
+        }
     };
     return SimpleGame;
 }());
