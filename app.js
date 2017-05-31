@@ -126,16 +126,16 @@ var SimpleGame = (function () {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
     SimpleGame.prototype.criarBolinhasNaTela = function (centena, dezena, unidade) {
-        var fixedY = 100;
-        var colunaBolinhas = fixedY + 180;
-        var w, h, y = 0;
+        var centralizarNoCubo = 80;
+        var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
+        var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
+        var espacoColunas = 75;
+        var w, h, x = 0;
         var y = fixedY;
-        var x = 100;
-        var espacoColunas = 45;
         var b;
         // centena
         for (var i = 0; i < centena; ++i) {
-            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas + 15;
+            x = (i % 2 == 0) ? colunaBolinhasX : colunaBolinhasX + 15;
             y += 15;
             b = this.game.add.sprite(x, y, 'circle_blue');
             b.width = 15;
@@ -143,10 +143,10 @@ var SimpleGame = (function () {
             this.centena.push(b);
         }
         y = fixedY;
-        colunaBolinhas += espacoColunas;
+        colunaBolinhasX += espacoColunas;
         // dezena
         for (var i = 0; i < dezena; ++i) {
-            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas + 15;
+            x = (i % 2 == 0) ? colunaBolinhasX : colunaBolinhasX + 15;
             y += 15;
             b = this.game.add.sprite(x, y, 'circle_yellow');
             b.width = 15;
@@ -154,10 +154,10 @@ var SimpleGame = (function () {
             this.centena.push(b);
         }
         y = fixedY;
-        colunaBolinhas += espacoColunas;
+        colunaBolinhasX += espacoColunas;
         // unidade
         for (var i = 0; i < unidade; ++i) {
-            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas + 15;
+            x = (i % 2 == 0) ? colunaBolinhasX : colunaBolinhasX + 15;
             y += 15;
             b = this.game.add.sprite(x, y, 'circle_red');
             b.width = 15;
@@ -205,9 +205,9 @@ var ManagerGames = (function () {
     return ManagerGames;
 }());
 window.onload = function () {
-    //var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");    
-    //var _int = +i;
-    var _int = 4;
+    var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");
+    var _int = +i;
+    // var _int = 1;
     var w = window.innerWidth;
     var h = window.innerHeight;
     mg = new ManagerGames(_int, w, h);

@@ -9,8 +9,8 @@ class SimpleGame {
         this.espelhar = mirror;
     }
 
-    w: number;
-    h: number;
+    w: number; // total tela
+    h: number; // total tela
     game: Phaser.Game;
     cursors: Phaser.CursorKeys;
 
@@ -163,18 +163,19 @@ class SimpleGame {
 
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
 
-        var fixedY = 100;
-        var colunaBolinhas = fixedY + 180;
-        var w, h, y = 0;
-        var y = fixedY;
-        var x = 100;
-        var espacoColunas = 45;
-        let b;
+        var centralizarNoCubo = 80;
+        var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
+        var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
+        
+        var espacoColunas = 75;
 
+        var w, h, x = 0;
+        var y = fixedY;        
+        let b;
 
         // centena
         for (var i = 0; i < centena; ++i) {
-            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas+15;
+            x = (i % 2 == 0) ? colunaBolinhasX : colunaBolinhasX+15;
             y += 15;
 
             b = this.game.add.sprite(x, y, 'circle_blue');
@@ -184,10 +185,10 @@ class SimpleGame {
         }
 
         y = fixedY;
-        colunaBolinhas += espacoColunas; 
+        colunaBolinhasX += espacoColunas;
         // dezena
         for (var i = 0; i < dezena; ++i) {
-            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas+15;
+            x = (i % 2 == 0) ? colunaBolinhasX : colunaBolinhasX+15;
             y += 15;
 
             b = this.game.add.sprite(x, y, 'circle_yellow');
@@ -197,10 +198,10 @@ class SimpleGame {
         }
 
         y = fixedY;
-        colunaBolinhas += espacoColunas; 
+        colunaBolinhasX += espacoColunas;
         // unidade
         for (var i = 0; i < unidade; ++i) {
-            x = (i % 2 == 0) ? colunaBolinhas : colunaBolinhas+15;
+            x = (i % 2 == 0) ? colunaBolinhasX : colunaBolinhasX+15;
             y += 15;
 
             b = this.game.add.sprite(x, y, 'circle_red');
@@ -262,9 +263,9 @@ class ManagerGames {
 
 declare var mg: ManagerGames;
 window.onload = () => {    
-    //var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");    
-    //var _int = +i;
-    var _int = 4;
+    var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");
+    var _int = +i;
+    // var _int = 1;
     var w = window.innerWidth;
     var h = window.innerHeight;
     mg = new ManagerGames(_int, w, h);
