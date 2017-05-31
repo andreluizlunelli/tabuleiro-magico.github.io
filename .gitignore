@@ -1,2 +1,8 @@
 # Include your project-specific ignores in this file
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
+.idea/andreluizlunelli.github.io.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+app2.js
+_index.html
