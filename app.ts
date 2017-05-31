@@ -20,8 +20,6 @@ class SimpleGame {
     step: number;
     espelhar: boolean;
 
-    d: Phaser.Sprite;
-
     centena: Array<Phaser.Sprite> = [];
     dezena: Array<Phaser.Sprite> = [];
     unidade: Array<Phaser.Sprite> = [];

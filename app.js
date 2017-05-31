@@ -116,7 +116,7 @@ var SimpleGame = (function () {
             // verifico se o numero já existe na lista dos escolhidos
             for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
                 if (inteirosJaEscolhidos[j] === randomint) {
-                    randomint = this.getRandomInt(5, qtdRodadas);
+                    randomint = this.getRandomInt(0, qtdRodadas);
                 }
             }
             inteirosJaEscolhidos.push(randomint);
