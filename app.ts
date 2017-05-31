@@ -47,7 +47,7 @@ class SimpleGame {
         this.box = this.game.add.sprite(w, h, 'box');
         this.box.inputEnabled = true;
         this.box.events.onInputDown.add(function() {            
-            this.shakeBox();
+            this.fadeBox();
         }, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -114,6 +114,11 @@ class SimpleGame {
         this.game.debug.pointer(this.game.input.pointer8);
     }
 
+    fadeBox() {
+        console.log('fade');
+        this.game.add.tween(this.box).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 0, 0, true);
+    }
+
     shakeBox() {
         console.log('shakeBox');
         this.game.add.tween(this.box)
@@ -134,6 +139,9 @@ class SimpleGame {
             , [0, 5, 5]
             , [0, 2, 1]            
             , [0, 1, 8]            
+            , [0, 1, 6]            
+            , [0, 0, 6]            
+            , [0, 3, 1]            
         ];
         if (qtdRodadas > a.length) {
             alert("Numero de rodadas maior que o permitido");
@@ -163,7 +171,7 @@ class SimpleGame {
 
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
 
-        var centralizarNoCubo = 80;
+        var centralizarNoCubo = 90;
         var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
         var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
         
@@ -210,6 +218,7 @@ class SimpleGame {
             this.centena.push( b );
         }
 
+        this.game.world.bringToTop(this.box);
     }
 }
 

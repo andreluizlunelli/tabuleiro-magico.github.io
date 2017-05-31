@@ -25,7 +25,7 @@ var SimpleGame = (function () {
         this.box = this.game.add.sprite(w, h, 'box');
         this.box.inputEnabled = true;
         this.box.events.onInputDown.add(function () {
-            this.shakeBox();
+            this.fadeBox();
         }, this);
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.counter = 0;
@@ -81,6 +81,10 @@ var SimpleGame = (function () {
         this.game.debug.pointer(this.game.input.pointer7);
         this.game.debug.pointer(this.game.input.pointer8);
     };
+    SimpleGame.prototype.fadeBox = function () {
+        console.log('fade');
+        this.game.add.tween(this.box).to({ alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 0, 0, true);
+    };
     SimpleGame.prototype.shakeBox = function () {
         console.log('shakeBox');
         this.game.add.tween(this.box)
@@ -99,7 +103,10 @@ var SimpleGame = (function () {
             [6, 2, 0],
             [0, 5, 5],
             [0, 2, 1],
-            [0, 1, 8]
+            [0, 1, 8],
+            [0, 1, 6],
+            [0, 0, 6],
+            [0, 3, 1]
         ];
         if (qtdRodadas > a.length) {
             alert("Numero de rodadas maior que o permitido");
@@ -109,7 +116,7 @@ var SimpleGame = (function () {
             // verifico se o numero já existe na lista dos escolhidos
             for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
                 if (inteirosJaEscolhidos[j] === randomint) {
-                    randomint = this.getRandomInt(0, qtdRodadas);
+                    randomint = this.getRandomInt(5, qtdRodadas);
                 }
             }
             inteirosJaEscolhidos.push(randomint);
@@ -126,7 +133,7 @@ var SimpleGame = (function () {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
     SimpleGame.prototype.criarBolinhasNaTela = function (centena, dezena, unidade) {
-        var centralizarNoCubo = 80;
+        var centralizarNoCubo = 90;
         var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
         var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
         var espacoColunas = 75;
@@ -164,6 +171,7 @@ var SimpleGame = (function () {
             b.height = 15;
             this.centena.push(b);
         }
+        this.game.world.bringToTop(this.box);
     };
     return SimpleGame;
 }());
