@@ -1,5 +1,4 @@
 /// <reference path="typescript/phaser.d.ts" />
-// <reference path="node_modules/phaser-input/build/phaser-input.d.ts" />
 
 class SimpleGame {
 
@@ -7,7 +6,7 @@ class SimpleGame {
         this.w = width;
         this.h = height;
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
-        //this.game.plugins.add(Fabrique.Plugins.InputField);
+        
     }
 
     w: number;
