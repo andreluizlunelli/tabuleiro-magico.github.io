@@ -25,7 +25,7 @@ class SimpleGame {
     unidade: Array<Phaser.Sprite> = [];
 
     preload() {
-        this.game.load.image("box", "assets/box.png");
+        this.game.load.image("box", "assets/background.png");
         this.game.load.image("circle_red", "assets/circle_red.svg");
         this.game.load.image("circle_yellow", "assets/circle_yellow.svg");
         this.game.load.image("circle_blue", "assets/circle_blue.svg");
