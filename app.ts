@@ -26,8 +26,6 @@ class SimpleGame {
 
     preload() {
         this.game.load.image("background", "assets/background.png");
-        this.game.load.image("upa", "assets/background.png");
-        this.game.load.image("downa", "assets/background.png");
     }
 
     create() {
@@ -45,20 +43,7 @@ class SimpleGame {
             this.shakeBox();
         }, this);
 
-        
-        // var text = game.add.bitmapText(400, 300, 'desyrel', 'Middle Earth', 64);       
-        this.upa = this.game.add.sprite(w, h, 'upa');
-        this.upa.inputEnabled = true;
-        this.upa.events.onInputDown.add(function() {
-            //TODO
-        }, this);
-
-        this.downa = this.game.add.sprite(w, h, 'downa');
-        this.downa.inputEnabled = true;
-        this.downa.events.onInputDown.add(function() {
-            //TODO
-        }, this);
-
+       
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
         this.counter = 0;
