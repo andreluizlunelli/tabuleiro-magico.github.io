@@ -15,18 +15,24 @@ var SimpleGame = (function () {
         this.game.load.image("circle_yellow", "assets/circle_yellow.svg");
         this.game.load.image("circle_blue", "assets/circle_blue.svg");
     };
+    SimpleGame.prototype.endTimer = function () {
+        console.log('stop timer');
+        this.timer.stop();
+    };
+    SimpleGame.prototype.startTimer = function () {
+        console.log('start timer');
+        this.timer.start();
+    };
     SimpleGame.prototype.create = function () {
+        this.timer = this.game.time.create();
+        this.timerEvent = this.timer.add(Phaser.Timer.MINUTE * 0.5, this.endTimer, this);
         this.game.stage.backgroundColor = "#51E898";
-        //  We're going to be using physics, so enable the Arcade Physics system
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // tamanho box 256x256
         var w = (this.game.world.width / 2) - 128; // 128
         var h = (this.game.world.height / 2) - 128; // 128
         this.box = this.game.add.sprite(w, h, 'box');
         this.box.inputEnabled = true;
-        this.box.events.onInputDown.add(function () {
-            this.fadeBox();
-        }, this);
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.counter = 0;
         this.step = Math.PI * 2 / 360;
@@ -41,7 +47,7 @@ var SimpleGame = (function () {
         var unidade = a[0][2];
         this.criarBolinhasNaTela(centena, dezena, unidade);
         if (this.espelhar) {
-            // ISSO AQUI FUNCIONA
+            // ISSO AQUI FUNCIONA não apagar
             // var g = this.game.add.group();
             // g.x = 500;
             //
@@ -53,7 +59,7 @@ var SimpleGame = (function () {
         }
     };
     SimpleGame.prototype.update = function () {
-        /*
+        /* NÃO APAGAR
         var tStep = Math.sin( this.counter ) ;
         this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
         this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
@@ -61,25 +67,30 @@ var SimpleGame = (function () {
         this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;
         this.counter += this.step ;
         */
-        if (this.cursors.down.isDown) {
-            //this.game.stage.backgroundColor = "#000000";
-            this.shakeBox();
-            //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
-            //  The 3000 tells it to wait for 3 seconds before starting the fade back.
-            //this.tween.yoyo(true, 3000);
-        }
     };
     SimpleGame.prototype.render = function () {
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);
-        this.game.debug.pointer(this.game.input.mousePointer);
-        this.game.debug.pointer(this.game.input.pointer1);
-        this.game.debug.pointer(this.game.input.pointer2);
-        this.game.debug.pointer(this.game.input.pointer3);
-        this.game.debug.pointer(this.game.input.pointer4);
-        this.game.debug.pointer(this.game.input.pointer5);
-        this.game.debug.pointer(this.game.input.pointer6);
-        this.game.debug.pointer(this.game.input.pointer7);
-        this.game.debug.pointer(this.game.input.pointer8);
+        // NÃO APAGAR
+        // this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        // this.game.debug.pointer(this.game.input.mousePointer);
+        // this.game.debug.pointer(this.game.input.pointer1);
+        // this.game.debug.pointer(this.game.input.pointer2);
+        // this.game.debug.pointer(this.game.input.pointer3);
+        // this.game.debug.pointer(this.game.input.pointer4);
+        // this.game.debug.pointer(this.game.input.pointer5);
+        // this.game.debug.pointer(this.game.input.pointer6);
+        // this.game.debug.pointer(this.game.input.pointer7);
+        // this.game.debug.pointer(this.game.input.pointer8);
+        if (this.timer.running) {
+            this.game.debug.text(this.formatTime(Math.round((this.timerEvent.delay - this.timer.ms) / 1000)), 2, 14, "black");
+        }
+        else {
+        }
+    };
+    SimpleGame.prototype.formatTime = function (s) {
+        // Convert seconds (s) to a nicely formatted and padded time string
+        var minutes = "0" + Math.floor(s / 60);
+        var seconds = "0" + (s - minutes * 60);
+        return minutes.substr(-2) + ":" + seconds.substr(-2);
     };
     SimpleGame.prototype.fadeBox = function () {
         console.log('fade');
@@ -116,7 +127,7 @@ var SimpleGame = (function () {
             // verifico se o numero já existe na lista dos escolhidos
             for (var j = 0; j < inteirosJaEscolhidos.length; j++) {
                 if (inteirosJaEscolhidos[j] === randomint) {
-                    randomint = this.getRandomInt(5, qtdRodadas);
+                    randomint = this.getRandomInt(0, qtdRodadas);
                 }
             }
             inteirosJaEscolhidos.push(randomint);
@@ -124,13 +135,6 @@ var SimpleGame = (function () {
             listaRetornaRandomicos.push(item);
         }
         return listaRetornaRandomicos;
-    };
-    /**
-     * Returns a random integer between min (inclusive) and max (inclusive)
-     * Using Math.round() will give you a non-uniform distribution!
-     */
-    SimpleGame.prototype.getRandomInt = function (min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     };
     SimpleGame.prototype.criarBolinhasNaTela = function (centena, dezena, unidade) {
         var centralizarNoCubo = 90;
@@ -173,6 +177,13 @@ var SimpleGame = (function () {
         }
         this.game.world.bringToTop(this.box);
     };
+    /**
+     * Returns a random integer between min (inclusive) and max (inclusive)
+     * Using Math.round() will give you a non-uniform distribution!
+     */
+    SimpleGame.prototype.getRandomInt = function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
     return SimpleGame;
 }());
 var ManagerGames = (function () {
@@ -186,6 +197,23 @@ var ManagerGames = (function () {
         this.h = h;
     }
     ManagerGames.prototype.start = function () {
+        console.log('start');
+        for (var _i = 0, _a = this.list; _i < _a.length; _i++) {
+            var g = _a[_i];
+            g.fadeBox();
+            g.startTimer();
+        }
+    };
+    ManagerGames.prototype.addEventPressionarBotaoPlay = function () {
+        var _this = this;
+        console.log('adicionou evento: addEventPressionarBotaoPlay');
+        var btn = document.body.querySelector("#btn-play");
+        btn.addEventListener("click", function () {
+            _this.start();
+        });
+    };
+    ManagerGames.prototype.load = function () {
+        console.log('load');
         switch (this.numInstances) {
             case 1:
                 this.list.push(new SimpleGame(this.w, this.h, false));
@@ -218,13 +246,11 @@ window.onload = function () {
     if (!_int) {
         _int = 1;
     }
-    // var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");
-    // var _int = +i;
-    // var _int = 1;
     var w = window.innerWidth;
     var h = window.innerHeight;
     mg = new ManagerGames(_int, w, h);
-    mg.start();
+    mg.load();
+    mg.addEventPressionarBotaoPlay();
 };
 function getParameterByName(name, url) {
     if (url === void 0) { url = ''; }

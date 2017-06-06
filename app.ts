@@ -26,6 +26,9 @@ class SimpleGame {
     dezena: Array<Phaser.Sprite> = [];
     unidade: Array<Phaser.Sprite> = [];
 
+    timer: Phaser.Timer;
+    timerEvent: Phaser.TimerEvent;
+
     preload() {
         this.game.load.image("box", "assets/box.png");
         this.game.load.image("circle_red", "assets/circle_red.svg");
@@ -33,22 +36,29 @@ class SimpleGame {
         this.game.load.image("circle_blue", "assets/circle_blue.svg");
     }
 
-    create() {        
+    endTimer() {
+        console.log('stop timer');
+        this.timer.stop();
+    }
 
-        this.game.stage.backgroundColor = "#51E898";        
+    startTimer() {
+        console.log('start timer');
+        this.timer.start();
+    }
 
-        //  We're going to be using physics, so enable the Arcade Physics system
+    create() {
+
+        this.timer = this.game.time.create();
+        this.timerEvent = this.timer.add(Phaser.Timer.MINUTE * 0.5, this.endTimer, this);
+
+        this.game.stage.backgroundColor = "#51E898";
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
         // tamanho box 256x256
         var w = (this.game.world.width / 2) - 128; // 128
         var h = (this.game.world.height / 2) - 128; // 128
 
         this.box = this.game.add.sprite(w, h, 'box');
         this.box.inputEnabled = true;
-        this.box.events.onInputDown.add(function() {            
-            this.fadeBox();
-        }, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
@@ -68,7 +78,7 @@ class SimpleGame {
         this.criarBolinhasNaTela(centena, dezena, unidade);
 
         if (this.espelhar) { // espelhar
-            // ISSO AQUI FUNCIONA
+            // ISSO AQUI FUNCIONA não apagar
             // var g = this.game.add.group();
             // g.x = 500;
             //
@@ -82,7 +92,7 @@ class SimpleGame {
 
     update() {
 
-        /*
+        /* NÃO APAGAR
         var tStep = Math.sin( this.counter ) ;
         this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
         this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
@@ -90,28 +100,32 @@ class SimpleGame {
         this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;
         this.counter += this.step ;
         */
-        if (this.cursors.down.isDown) {
-            //this.game.stage.backgroundColor = "#000000";
-            this.shakeBox();
-
-            //  And this tells it to yoyo, i.e. fade back to zero again before repeating.
-            //  The 3000 tells it to wait for 3 seconds before starting the fade back.
-            //this.tween.yoyo(true, 3000);
-        }
     }
 
     render() {
-        this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        // NÃO APAGAR
+        // this.game.debug.cameraInfo(this.game.camera, 32, 32);
+        // this.game.debug.pointer(this.game.input.mousePointer);
+        // this.game.debug.pointer(this.game.input.pointer1);
+        // this.game.debug.pointer(this.game.input.pointer2);
+        // this.game.debug.pointer(this.game.input.pointer3);
+        // this.game.debug.pointer(this.game.input.pointer4);
+        // this.game.debug.pointer(this.game.input.pointer5);
+        // this.game.debug.pointer(this.game.input.pointer6);
+        // this.game.debug.pointer(this.game.input.pointer7);
+        // this.game.debug.pointer(this.game.input.pointer8);
+        if (this.timer.running) {
+            this.game.debug.text(this.formatTime(Math.round((this.timerEvent.delay - this.timer.ms) / 1000)), 2, 14, "black");
+        }
+        else {
+        }
+    }
 
-        this.game.debug.pointer(this.game.input.mousePointer);
-        this.game.debug.pointer(this.game.input.pointer1);
-        this.game.debug.pointer(this.game.input.pointer2);
-        this.game.debug.pointer(this.game.input.pointer3);
-        this.game.debug.pointer(this.game.input.pointer4);
-        this.game.debug.pointer(this.game.input.pointer5);
-        this.game.debug.pointer(this.game.input.pointer6);
-        this.game.debug.pointer(this.game.input.pointer7);
-        this.game.debug.pointer(this.game.input.pointer8);
+    formatTime(s:number) {
+        // Convert seconds (s) to a nicely formatted and padded time string
+        var minutes = "0" + Math.floor(s / 60);
+        var seconds = "0" + (s - minutes * 60);
+        return minutes.substr(-2) + ":" + seconds.substr(-2);
     }
 
     fadeBox() {
@@ -161,24 +175,16 @@ class SimpleGame {
         return listaRetornaRandomicos;
     }
 
-    /**
-     * Returns a random integer between min (inclusive) and max (inclusive)
-     * Using Math.round() will give you a non-uniform distribution!
-     */
-    getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
 
         var centralizarNoCubo = 90;
         var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
         var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
-        
+
         var espacoColunas = 75;
 
         var w, h, x = 0;
-        var y = fixedY;        
+        var y = fixedY;
         let b;
 
         // centena
@@ -220,6 +226,15 @@ class SimpleGame {
 
         this.game.world.bringToTop(this.box);
     }
+
+    /**
+     * Returns a random integer between min (inclusive) and max (inclusive)
+     * Using Math.round() will give you a non-uniform distribution!
+     */
+    getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
 }
 
 class ManagerGames {
@@ -239,34 +254,50 @@ class ManagerGames {
     list:Array<SimpleGame> = [];
 
     start() {
+        console.log('start');
+        for (let g of this.list) {
+            g.fadeBox();
+            g.startTimer();
+        }
+    }
+
+    addEventPressionarBotaoPlay() {
+        console.log('adicionou evento: addEventPressionarBotaoPlay');
+        let btn = <HTMLElement>document.body.querySelector("#btn-play");
+        btn.addEventListener("click", () => {
+            this.start();
+        });
+    }
+
+    load() {
+        console.log('load');
         switch (this.numInstances) {
             case 1:
-                this.list.push(new SimpleGame(this.w, this.h, false));              
+                this.list.push(new SimpleGame(this.w, this.h, false));
                 break;
-            
+
             case 2:
                 this.list.push(new SimpleGame(this.w/2, this.h, false));
                 this.list.push(new SimpleGame(this.w/2, this.h, false));
                 break;
-            
+
             case 3:
                 this.list.push(new SimpleGame(this.w/2, this.h/2, true));
                 this.list.push(new SimpleGame(this.w/2, this.h/2, true));
                 this.list.push(new SimpleGame(this.w/2, this.h/2, false));
                 break;
-            
-            case 4:                
+
+            case 4:
                 this.list.push(new SimpleGame(this.w/2, this.h/2, true));
                 this.list.push(new SimpleGame(this.w/2, this.h/2, true));
                 this.list.push(new SimpleGame(this.w/2, this.h/2, false));
                 this.list.push(new SimpleGame(this.w/2, this.h/2, false));
                 break;
-            
+
             default:
                 alert("valor inválido");
                 break;
         }
-        
     }
 }
 
@@ -279,14 +310,12 @@ window.onload = () => {
         _int = 1;
     }
 
-    // var i = window.prompt("Digite a quantidade de instâncias do jogo(1 à 4)", "");
-    // var _int = +i;
-
-    // var _int = 1;
     var w = window.innerWidth;
     var h = window.innerHeight;
     mg = new ManagerGames(_int, w, h);
-    mg.start();
+    mg.load();
+    mg.addEventPressionarBotaoPlay();
+
 };
 
 function getParameterByName(name, url='') {
