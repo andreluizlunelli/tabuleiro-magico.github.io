@@ -90,18 +90,6 @@ class SimpleGame {
         this.meioField.inputEnabled = true;
         this.direitoField.inputEnabled = true;
 
-       this.esquerdoField.events.onInputDown.add(function () {
-            this.shakeBox();
-        }, this);
-
-        this.meioField.events.onInputDown.add(function () {
-            this.shakeBox();
-        }, this);
-
-        this.direitoField.events.onInputDown.add(function () {
-                    this.shakeBox();
-        }, this);
-
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
         this.counter = 0;
