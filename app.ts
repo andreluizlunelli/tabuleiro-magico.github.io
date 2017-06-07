@@ -29,6 +29,11 @@ class SimpleGame {
     tween: Phaser.Tween;
     counter: number;
     step: number;
+
+    texto1: number;
+    texto2: number;
+    texto3: number;
+
     espelhar: boolean;
 
     d: Phaser.Sprite;
@@ -60,7 +65,46 @@ class SimpleGame {
         this.timer.start();
     }
 
+    setTexto1(d:number){
+      if(d == 0 && this.texto1 == 10){
+        this.texto1 = 0;
+      } else if(d == 0 && this.texto1 == 0) {
+        this.texto1 = 10;
+      } if(d == 0 ){
+        this.texto1 = this.texto1 + 1;
+      } else{
+        this.texto1 = this.texto1 - 1;
+      }
+    }
+
+    setTexto2(d:number){
+      if(d == 0 && this.texto2 == 10){
+        this.texto2 = 0;
+      } else if(d == 0 && this.texto2 == 0) {
+        this.texto2 = 10;
+      } if(d == 0 ){
+        this.texto2 = this.texto2 + 1;
+      } else{
+        this.texto2 = this.texto2 - 1;
+      }
+    }
+
+    setTexto3(d:number){
+      if(d == 0 && this.texto3 == 10){
+        this.texto3 = 0;
+      } else if(d == 0 && this.texto3 == 0) {
+        this.texto3 = 10;
+      } if(d == 0 ){
+        this.texto3 = this.texto3 + 1;
+      } else{
+        this.texto3 = this.texto3 - 1;
+      }
+    }
+
     create() {
+        this.texto1=0;
+        this.texto2=0;
+        this.texto3=0;
 
         this.timer = this.game.time.create();
         this.timerEvent = this.timer.add(Phaser.Timer.MINUTE * 0.5, this.endTimer, this);
@@ -85,6 +129,38 @@ class SimpleGame {
         this.upperbutton2 =  this.game.add.sprite(wField + 375, hField + 15, 'upperbutton');
         this.bottomButtom3 =  this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
         this.upperbutton3 =  this.game.add.sprite(wField + 625, hField +15, 'upperbutton');
+
+        this.bottomButtom1.inputEnabled = true;
+        this.bottomButtom1.events.onInputDown.add(function() {
+          this.setTexto1(1);
+        }, this);
+        this.upperbutton1.inputEnabled = true;
+        this.upperbutton1.events.onInputDown.add(function() {
+          this.setTexto1(0);
+        }, this);
+
+        this.bottomButtom2.inputEnabled = true;
+        this.bottomButtom2.events.onInputDown.add(function() {
+          this.setTexto1(1);
+        }, this);
+        this.upperbutton2.inputEnabled = true;
+        this.upperbutton2.events.onInputDown.add(function() {
+          this.setTexto1(0);
+        }, this);
+
+        this.bottomButtom3.inputEnabled = true;
+        this.bottomButtom3.events.onInputDown.add(function() {
+          this.setTexto1(1);
+        }, this);
+        this.upperbutton3.inputEnabled = true;
+        this.upperbutton3.events.onInputDown.add(function() {
+          this.setTexto1(0);
+        }, this);
+
+
+        var text1 = this.game.add.text(wField +15, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        var text2 = this.game.add.text(wField +260, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        var text3 = this.game.add.text(wField +510, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
 
         this.esquerdoField.inputEnabled = true;
         this.meioField.inputEnabled = true;
@@ -121,7 +197,6 @@ class SimpleGame {
     }
 
     update() {
-
         var tStep = Math.sin( this.counter ) ;
         this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
         this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
