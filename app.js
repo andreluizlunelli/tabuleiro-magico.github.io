@@ -14,6 +14,9 @@ var SimpleGame = (function () {
         this.game.load.image("circle_red", "assets/circle_red.svg");
         this.game.load.image("circle_yellow", "assets/circle_yellow.svg");
         this.game.load.image("circle_blue", "assets/circle_blue.svg");
+        this.game.load.image("field", "assets/field.png");
+        this.game.load.image("bottomButtom", "assets/bottomButtom.png");
+        this.game.load.image("upperbutton", "assets/upperbutton.png");
     };
     SimpleGame.prototype.endTimer = function () {
         console.log('stop timer');
@@ -31,8 +34,30 @@ var SimpleGame = (function () {
         // tamanho box 256x256
         var w = (this.game.world.width / 2) - 128; // 128
         var h = (this.game.world.height / 2) - 128; // 128
+        var wField = (this.game.world.height / 2) + 100; // 128
+        var hField = (this.game.world.height / 2) + 200; // 128
         this.box = this.game.add.sprite(w, h, 'box');
-        this.box.inputEnabled = true;
+        this.esquerdoField = this.game.add.sprite(wField, hField, 'field');
+        this.meioField = this.game.add.sprite(wField + 250, hField, 'field');
+        this.direitoField = this.game.add.sprite(wField + 500, hField, 'field');
+        this.bottomButtom1 = this.game.add.sprite(wField + 125, hField + 45, 'bottomButtom');
+        this.upperbutton1 = this.game.add.sprite(wField + 125, hField + 15, 'upperbutton');
+        this.bottomButtom2 = this.game.add.sprite(wField + 375, hField + 45, 'bottomButtom');
+        this.upperbutton2 = this.game.add.sprite(wField + 375, hField + 15, 'upperbutton');
+        this.bottomButtom3 = this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
+        this.upperbutton3 = this.game.add.sprite(wField + 625, hField + 15, 'upperbutton');
+        this.esquerdoField.inputEnabled = true;
+        this.meioField.inputEnabled = true;
+        this.direitoField.inputEnabled = true;
+        this.esquerdoField.events.onInputDown.add(function () {
+            this.shakeBox();
+        }, this);
+        this.meioField.events.onInputDown.add(function () {
+            this.shakeBox();
+        }, this);
+        this.direitoField.events.onInputDown.add(function () {
+            this.shakeBox();
+        }, this);
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.counter = 0;
         this.step = Math.PI * 2 / 360;
@@ -59,14 +84,12 @@ var SimpleGame = (function () {
         }
     };
     SimpleGame.prototype.update = function () {
-        /* NÃO APAGAR
-        var tStep = Math.sin( this.counter ) ;
-        this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
-        this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
-        this.box.z = this.game.world.width + tStep * 30 ;
-        this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;
-        this.counter += this.step ;
-        */
+        var tStep = Math.sin(this.counter);
+        this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30;
+        this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30;
+        this.box.z = this.game.world.width + tStep * 30;
+        this.box.rotation += Phaser.Math.degToRad(0.1 * tStep);
+        this.counter += this.step;
     };
     SimpleGame.prototype.render = function () {
         // NÃO APAGAR
@@ -88,9 +111,9 @@ var SimpleGame = (function () {
     };
     SimpleGame.prototype.formatTime = function (s) {
         // Convert seconds (s) to a nicely formatted and padded time string
-        var minutes = "0" + Math.floor(s / 60);
-        var seconds = "0" + (s - minutes * 60);
-        return minutes.substr(-2) + ":" + seconds.substr(-2);
+        var minutes = Math.floor(s / 60);
+        var seconds = (s - minutes * 60);
+        return minutes + ":" + seconds;
     };
     SimpleGame.prototype.fadeBox = function () {
         console.log('fade');

@@ -4,17 +4,28 @@ class SimpleGame {
 
     constructor(width: number, height: number, mirror: boolean) {
         this.w = width;
-        this.h = height;        
-        this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);        
+        this.h = height;
+        this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
         this.espelhar = mirror;
     }
 
     w: number; // total tela
     h: number; // total tela
+    wField: number;
+    hField: number;
     game: Phaser.Game;
     cursors: Phaser.CursorKeys;
 
     box: Phaser.Sprite;
+    esquerdoField : Phaser.Sprite;
+    direitoField : Phaser.Sprite;
+    meioField : Phaser.Sprite;
+    bottomButtom1: Phaser.Sprite;
+    upperbutton1: Phaser.Sprite;
+    bottomButtom2: Phaser.Sprite;
+    upperbutton2: Phaser.Sprite;
+    bottomButtom3: Phaser.Sprite;
+    upperbutton3: Phaser.Sprite;
     tween: Phaser.Tween;
     counter: number;
     step: number;
@@ -34,6 +45,9 @@ class SimpleGame {
         this.game.load.image("circle_red", "assets/circle_red.svg");
         this.game.load.image("circle_yellow", "assets/circle_yellow.svg");
         this.game.load.image("circle_blue", "assets/circle_blue.svg");
+        this.game.load.image("field", "assets/field.png");
+        this.game.load.image("bottomButtom", "assets/bottomButtom.png");
+        this.game.load.image("upperbutton", "assets/upperbutton.png");
     }
 
     endTimer() {
@@ -57,14 +71,42 @@ class SimpleGame {
         var w = (this.game.world.width / 2) - 128; // 128
         var h = (this.game.world.height / 2) - 128; // 128
 
+        var wField = (this.game.world.height / 2) + 100; // 128
+        var hField = (this.game.world.height / 2) + 200; // 128
+
         this.box = this.game.add.sprite(w, h, 'box');
-        this.box.inputEnabled = true;
+        this.esquerdoField =  this.game.add.sprite(wField, hField, 'field');
+        this.meioField =  this.game.add.sprite(wField + 250, hField,'field');
+        this.direitoField =  this.game.add.sprite(wField + 500, hField, 'field');
+
+        this.bottomButtom1 =  this.game.add.sprite(wField + 125, hField + 45, 'bottomButtom');
+        this.upperbutton1 =  this.game.add.sprite(wField + 125, hField + 15, 'upperbutton');
+        this.bottomButtom2 =  this.game.add.sprite(wField + 375, hField + 45, 'bottomButtom');
+        this.upperbutton2 =  this.game.add.sprite(wField + 375, hField + 15, 'upperbutton');
+        this.bottomButtom3 =  this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
+        this.upperbutton3 =  this.game.add.sprite(wField + 625, hField +15, 'upperbutton');
+
+        this.esquerdoField.inputEnabled = true;
+        this.meioField.inputEnabled = true;
+        this.direitoField.inputEnabled = true;
+
+       this.esquerdoField.events.onInputDown.add(function () {
+            this.shakeBox();
+        }, this);
+
+        this.meioField.events.onInputDown.add(function () {
+            this.shakeBox();
+        }, this);
+
+        this.direitoField.events.onInputDown.add(function () {
+                    this.shakeBox();
+        }, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        
+
         this.counter = 0;
         this.step = Math.PI * 2 / 360;
-       
+
         this.game.input.addPointer();
         this.game.input.addPointer();
         this.game.input.addPointer();
@@ -92,14 +134,13 @@ class SimpleGame {
 
     update() {
 
-        /* NÃO APAGAR
         var tStep = Math.sin( this.counter ) ;
         this.box.y = ((this.game.world.height / 2) - 128) + tStep * 30 ;
         this.box.x = ((this.game.world.width / 2) - 128) + tStep * 30 ;
         this.box.z = this.game.world.width + tStep * 30 ;
         this.box.rotation += Phaser.Math.degToRad( 0.1 * tStep ) ;
         this.counter += this.step ;
-        */
+
     }
 
     render() {
@@ -123,9 +164,9 @@ class SimpleGame {
 
     formatTime(s:number) {
         // Convert seconds (s) to a nicely formatted and padded time string
-        var minutes = "0" + Math.floor(s / 60);
-        var seconds = "0" + (s - minutes * 60);
-        return minutes.substr(-2) + ":" + seconds.substr(-2);
+        var minutes =  Math.floor(s / 60);
+        var seconds =  (s - minutes * 60);
+        return minutes + ":" + seconds;
     }
 
     fadeBox() {
@@ -151,11 +192,11 @@ class SimpleGame {
             , [4, 5, 6]
             , [6, 2, 0]
             , [0, 5, 5]
-            , [0, 2, 1]            
-            , [0, 1, 8]            
-            , [0, 1, 6]            
-            , [0, 0, 6]            
-            , [0, 3, 1]            
+            , [0, 2, 1]
+            , [0, 1, 8]
+            , [0, 1, 6]
+            , [0, 0, 6]
+            , [0, 3, 1]
         ];
         if (qtdRodadas > a.length) {
             alert("Numero de rodadas maior que o permitido");
@@ -238,14 +279,14 @@ class SimpleGame {
 }
 
 class ManagerGames {
-    
+
     constructor(numInstances: number, w: number, h: number) {
         if (numInstances < 1 || numInstances > 4) {
             alert("Numero de instâncias simultâneas é de 1 à 4");
         }
         this.numInstances = numInstances;
         this.w = w;
-        this.h = h;        
+        this.h = h;
     }
 
     numInstances: number;
@@ -327,4 +368,3 @@ function getParameterByName(name, url='') {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
-
