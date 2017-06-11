@@ -27,17 +27,17 @@ var SimpleGame = (function () {
         this.timer.start();
     };
     SimpleGame.prototype.setTexto1 = function (d) {
-        if (d == 0 && this.texto1 == 10) {
-            this.texto1 = 0;
+        if (d == 0 && +this.text1 == 10) {
+            this.text1.setText("0");
         }
-        else if (d == 0 && this.texto1 == 0) {
-            this.texto1 = 10;
+        else if (d == 0 && +this.text1 == 0) {
+            this.text1.setText("10");
         }
         if (d == 0) {
-            this.texto1 = this.texto1 + 1;
+            this.text1.setText("" + (+this.text1 + 1));
         }
         else {
-            this.texto1 = this.texto1 - 1;
+            this.text1.setText("" + (+this.text1 - 1));
         }
     };
     SimpleGame.prototype.setTexto2 = function (d) {
@@ -115,7 +115,7 @@ var SimpleGame = (function () {
         this.upperbutton3.events.onInputDown.add(function () {
             this.setTexto1(0);
         }, this);
-        var text1 = this.game.add.text(wField + 15, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.text1 = this.game.add.text(wField + 15, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         var text2 = this.game.add.text(wField + 260, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         var text3 = this.game.add.text(wField + 510, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.esquerdoField.inputEnabled = true;
