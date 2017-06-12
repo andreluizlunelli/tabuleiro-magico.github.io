@@ -28,11 +28,11 @@ var SimpleGame = (function () {
         this.timer.start();
     };
     SimpleGame.prototype.setTexto1 = function (d) {
-        if (d == 0 && +this.text1.text == 10) {
+        if (d == 0 && +this.text1.text == 9) {
             this.text1.setText("0");
         }
         else if (d == 1 && +this.text1.text == 0) {
-            this.text1.setText("10");
+            this.text1.setText("9");
         }
         else if (d == 0) {
             this.text1.setText("" + (+this.text1.text + 1));
@@ -42,11 +42,11 @@ var SimpleGame = (function () {
         }
     };
     SimpleGame.prototype.setTexto2 = function (d) {
-        if (d == 0 && +this.text2.text == 10) {
+        if (d == 0 && +this.text2.text == 9) {
             this.text2.setText("0");
         }
         else if (d == 1 && +this.text2.text == 0) {
-            this.text2.setText("10");
+            this.text2.setText("9");
         }
         else if (d == 0) {
             this.text2.setText("" + (+this.text2.text + 1));
@@ -56,11 +56,11 @@ var SimpleGame = (function () {
         }
     };
     SimpleGame.prototype.setTexto3 = function (d) {
-        if (d == 0 && +this.text3.text == 10) {
+        if (d == 0 && +this.text3.text == 9) {
             this.text3.setText("0");
         }
         else if (d == 1 && +this.text3.text == 0) {
-            this.text3.setText("10");
+            this.text3.setText("9");
         }
         else if (d == 0) {
             this.text3.setText("" + (+this.text3.text + 1));
