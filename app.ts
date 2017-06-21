@@ -27,6 +27,7 @@ class SimpleGame {
     upperbutton2: Phaser.Sprite;
     bottomButtom3: Phaser.Sprite;
     upperbutton3: Phaser.Sprite;
+    ok: Phaser.Sprite;
     tween: Phaser.Tween;
     counter: number;
     step: number;
@@ -59,6 +60,7 @@ class SimpleGame {
         this.game.load.image("field", "assets/field.png");
         this.game.load.image("bottomButtom", "assets/bottomButtom.png");
         this.game.load.image("upperbutton", "assets/upperbutton.png");
+        this.game.load.image("ok", "assets/ok.svg");
     }
 
     endTimer() {
@@ -158,10 +160,6 @@ class SimpleGame {
         this.text2 = this.game.add.text(wField + 85, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text3 = this.game.add.text(wField + 180, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
 
-        this.esquerdoField.inputEnabled = true;
-        this.meioField.inputEnabled = true;
-        this.direitoField.inputEnabled = true;
-
     }
 
     create() {
@@ -169,7 +167,6 @@ class SimpleGame {
         this.back = this.game.add.sprite(0, 0, 'back');
         this.back.width = 1920;
         this.back.height = 1080;
-
 
         this.texto1=0;
         this.texto2=0;
@@ -362,6 +359,18 @@ class SimpleGame {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    criarBotaoOk() {
+        this.ok = this.game.add.sprite((this.game.world.width / 2) - 50, 10, 'ok');
+        this.ok.inputEnabled = true;
+        this.ok.events.onInputDown.add(function() {
+
+            console.log(this.text1.text)
+            console.log(this.text2.text)
+            console.log(this.text3.text)
+
+        }, this);
+    }
+
 }
 
 class ManagerGames {
@@ -382,6 +391,7 @@ class ManagerGames {
 
     start() {
         for (let g of this.list) {
+            g.criarBotaoOk();
             g.fadeBox();
             g.startTimer();
         }

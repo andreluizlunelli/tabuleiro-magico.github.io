@@ -18,6 +18,7 @@ var SimpleGame = (function () {
         this.game.load.image("field", "assets/field.png");
         this.game.load.image("bottomButtom", "assets/bottomButtom.png");
         this.game.load.image("upperbutton", "assets/upperbutton.png");
+        this.game.load.image("ok", "assets/ok.svg");
     };
     SimpleGame.prototype.endTimer = function () {
         console.log('stop timer');
@@ -111,9 +112,6 @@ var SimpleGame = (function () {
         this.text1 = this.game.add.text(wField - 20, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text2 = this.game.add.text(wField + 85, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text3 = this.game.add.text(wField + 180, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
-        this.esquerdoField.inputEnabled = true;
-        this.meioField.inputEnabled = true;
-        this.direitoField.inputEnabled = true;
     };
     SimpleGame.prototype.create = function () {
         this.back = this.game.add.sprite(0, 0, 'back');
@@ -280,6 +278,15 @@ var SimpleGame = (function () {
     SimpleGame.prototype.getRandomInt = function (min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
+    SimpleGame.prototype.criarBotaoOk = function () {
+        this.ok = this.game.add.sprite((this.game.world.width / 2) - 50, 10, 'ok');
+        this.ok.inputEnabled = true;
+        this.ok.events.onInputDown.add(function () {
+            console.log(this.text1.text);
+            console.log(this.text2.text);
+            console.log(this.text3.text);
+        }, this);
+    };
     return SimpleGame;
 }());
 var ManagerGames = (function () {
@@ -295,6 +302,7 @@ var ManagerGames = (function () {
     ManagerGames.prototype.start = function () {
         for (var _i = 0, _a = this.list; _i < _a.length; _i++) {
             var g = _a[_i];
+            g.criarBotaoOk();
             g.fadeBox();
             g.startTimer();
         }
