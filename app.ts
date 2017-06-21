@@ -19,6 +19,7 @@ class SimpleGame {
     pontos: number;
     atual: number;
 
+    fim: Phaser.Sprite;
     back: Phaser.Sprite;
     box: Phaser.Sprite;
     esquerdoField : Phaser.Sprite;
@@ -69,6 +70,7 @@ class SimpleGame {
         this.game.load.image("bottomButtom", "assets/bottomButtom.png");
         this.game.load.image("upperbutton", "assets/upperbutton.png");
         this.game.load.image("enviar", "assets/field.png");
+        this.game.load.image("fim", "assets/fim.jpg");
     }
 
     endTimer() {
@@ -332,9 +334,16 @@ class SimpleGame {
       }
       this.centena = [];
       this.atual = this.atual+1
-      if(this.atual > this.questoes.length){
-        //TODO terminar jogo
+      if(this.atual > (this.questoes.length - 1)){
+        this.fim = this.game.add.sprite(0, 0, 'fim');
+        this.game.world.bringToTop(this.fim);
+
       }else {
+
+        this.text1.setText("0");
+        this.text2.setText("0");
+        this.text3.setText("0");
+
         var centena = this.questoes[this.atual][0];
         var dezena = this.questoes[this.atual][1];
         var unidade = this.questoes[this.atual][2];
