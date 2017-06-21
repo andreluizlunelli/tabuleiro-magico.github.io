@@ -16,11 +16,16 @@ class SimpleGame {
     game: Phaser.Game;
     cursors: Phaser.CursorKeys;
 
+    pontos: number;
+    atual: number;
+
+    fim: Phaser.Sprite;
     back: Phaser.Sprite;
     box: Phaser.Sprite;
     esquerdoField : Phaser.Sprite;
     direitoField : Phaser.Sprite;
     meioField : Phaser.Sprite;
+    enviar: Phaser.Sprite;
     bottomButtom1: Phaser.Sprite;
     upperbutton1: Phaser.Sprite;
     bottomButtom2: Phaser.Sprite;
@@ -43,12 +48,17 @@ class SimpleGame {
     dezena: Array<Phaser.Sprite> = [];
     unidade: Array<Phaser.Sprite> = [];
 
+
+    questoes: Array<number> = [];
+
     timer: Phaser.Timer;
     timerEvent: Phaser.TimerEvent;
 
     text1 : Phaser.Text;
     text2 : Phaser.Text;
     text3 : Phaser.Text;
+
+    score : Phaser.Text;
 
     preload() {
         this.game.load.image("back", "assets/back.png");
@@ -59,6 +69,8 @@ class SimpleGame {
         this.game.load.image("field", "assets/field.png");
         this.game.load.image("bottomButtom", "assets/bottomButtom.png");
         this.game.load.image("upperbutton", "assets/upperbutton.png");
+        this.game.load.image("enviar", "assets/field.png");
+        this.game.load.image("fim", "assets/fim.jpg");
     }
 
     endTimer() {
@@ -72,99 +84,44 @@ class SimpleGame {
     }
 
     setTexto1(d:number){
-      if(d == 0 && +this.text1.text == 9){
-          this.text1.setText("0");
-      } else if(d == 1 && +this.text1.text  == 0) {
-        this.text1.setText("9");
-      } else if(d == 0 ){
-        this.text1.setText(""+(+this.text1.text + 1));
-      } else{
-        this.text1.setText(""+(+this.text1.text - 1));
-      }
+        if(d == 0 && +this.text1.text == 9){
+            this.text1.setText("0");
+        } else if(d == 1 && +this.text1.text  == 0) {
+            this.text1.setText("9");
+        } else if(d == 0 ){
+            this.text1.setText(""+(+this.text1.text + 1));
+        } else{
+            this.text1.setText(""+(+this.text1.text - 1));
+        }
     }
 
     setTexto2(d:number){
-      if(d == 0 && +this.text2.text == 9){
-          this.text2.setText("0");
-      } else if(d == 1 && +this.text2.text  == 0) {
-        this.text2.setText("9");
-      } else if(d == 0 ){
-        this.text2.setText(""+(+this.text2.text + 1));
-      } else{
-        this.text2.setText(""+(+this.text2.text - 1));
-      }
+        if(d == 0 && +this.text2.text == 9){
+            this.text2.setText("0");
+        } else if(d == 1 && +this.text2.text  == 0) {
+            this.text2.setText("9");
+        } else if(d == 0 ){
+            this.text2.setText(""+(+this.text2.text + 1));
+        } else{
+            this.text2.setText(""+(+this.text2.text - 1));
+        }
     }
 
     setTexto3(d:number){
-      if(d == 0 && +this.text3.text == 9){
-          this.text3.setText("0");
-      } else if(d == 1 && +this.text3.text  == 0) {
-        this.text3.setText("9");
-      } else if(d == 0 ){
-        this.text3.setText(""+(+this.text3.text + 1));
-      } else{
-        this.text3.setText(""+(+this.text3.text - 1));
-      }
+        if(d == 0 && +this.text3.text == 9){
+            this.text3.setText("0");
+        } else if(d == 1 && +this.text3.text  == 0) {
+            this.text3.setText("9");
+        } else if(d == 0 ){
+            this.text3.setText(""+(+this.text3.text + 1));
+        } else{
+            this.text3.setText(""+(+this.text3.text - 1));
+        }
     }
 
-    criarBotoesDeIncremento() {
-
-        let wField = (this.game.world.width / 2) - 101;
-        let hField = (this.game.world.height / 2) + 90;
-
-        // let wField2 = ((wField*35)/100);
-        // let hField2 = (hField/2+hField)+50;
-        // let marginField = 10 + 202; // margem + tamanho da largura da imagem
-        // this.esquerdoField =  this.game.add.sprite(wField2, hField2, 'field');
-        // this.meioField =  this.game.add.sprite(wField2+marginField, hField2, 'field');
-        // this.direitoField =  this.game.add.sprite(wField2+marginField+marginField, hField2, 'field');
-
-        this.bottomButtom1 = this.game.add.sprite(wField + 19, hField + 50, 'bottomButtom');
-        this.upperbutton1 = this.game.add.sprite(wField + 19, hField + 20, 'upperbutton');
-        this.bottomButtom2 = this.game.add.sprite(wField + 120, hField + 50, 'bottomButtom');
-        this.upperbutton2 = this.game.add.sprite(wField + 120, hField + 20, 'upperbutton');
-        this.bottomButtom3 = this.game.add.sprite(wField + 220, hField + 50, 'bottomButtom');
-        this.upperbutton3 = this.game.add.sprite(wField + 220, hField +20, 'upperbutton');
-
-        this.bottomButtom1.inputEnabled = true;
-        this.bottomButtom1.events.onInputDown.add(function() {
-            this.setTexto1(1);
-        }, this);
-        this.upperbutton1.inputEnabled = true;
-        this.upperbutton1.events.onInputDown.add(function() {
-            this.setTexto1(0);
-        }, this);
-
-        this.bottomButtom2.inputEnabled = true;
-        this.bottomButtom2.events.onInputDown.add(function() {
-            this.setTexto2(1);
-        }, this);
-        this.upperbutton2.inputEnabled = true;
-        this.upperbutton2.events.onInputDown.add(function() {
-            this.setTexto2(0);
-        }, this);
-
-        this.bottomButtom3.inputEnabled = true;
-        this.bottomButtom3.events.onInputDown.add(function() {
-            this.setTexto3(1);
-        }, this);
-        this.upperbutton3.inputEnabled = true;
-        this.upperbutton3.events.onInputDown.add(function() {
-            this.setTexto3(0);
-        }, this);
-
-
-        this.text1 = this.game.add.text(wField - 20, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
-        this.text2 = this.game.add.text(wField + 85, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
-        this.text3 = this.game.add.text(wField + 180, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
-
-        this.esquerdoField.inputEnabled = true;
-        this.meioField.inputEnabled = true;
-        this.direitoField.inputEnabled = true;
-
-    }
 
     create() {
+        this.pontos = 0;
 
         this.back = this.game.add.sprite(0, 0, 'back');
         this.back.width = 1920;
@@ -185,7 +142,78 @@ class SimpleGame {
         var w = (this.game.world.width / 2) - 128; // 128
         var h = (this.game.world.height / 2) - 128; // 128
 
+        var wField = (this.game.world.height / 2) + 100; // 128
+        var hField = (this.game.world.height / 2) + 200; // 128
+
         this.box = this.game.add.sprite(w, h, 'box');
+        this.esquerdoField =  this.game.add.sprite(wField, hField, 'field');
+        this.meioField =  this.game.add.sprite(wField + 250, hField,'field');
+        this.direitoField =  this.game.add.sprite(wField + 500, hField, 'field');
+
+        this.bottomButtom1 =  this.game.add.sprite(wField + 125, hField + 45, 'bottomButtom');
+        this.upperbutton1 =  this.game.add.sprite(wField + 125, hField + 15, 'upperbutton');
+        this.bottomButtom2 =  this.game.add.sprite(wField + 375, hField + 45, 'bottomButtom');
+        this.upperbutton2 =  this.game.add.sprite(wField + 375, hField + 15, 'upperbutton');
+        this.bottomButtom3 =  this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
+        this.upperbutton3 =  this.game.add.sprite(wField + 625, hField +15, 'upperbutton');
+
+        this.enviar =  this.game.add.sprite(w, 0 , 'enviar');
+
+        this.enviar.inputEnabled = true;
+        this.bottomButtom1.inputEnabled = true;
+        this.upperbutton1.inputEnabled = true;
+        this.bottomButtom2.inputEnabled = true;
+        this.upperbutton3.inputEnabled = true;
+        this.bottomButtom3.inputEnabled = true;
+        this.upperbutton2.inputEnabled = true;
+
+        this.enviar.events.onInputDown.add(function() {
+            if(this.questoes[this.atual][0] == +this.text1.text &&
+                this.questoes[this.atual][1] == +this.text2.text &&
+                this.questoes[this.atual][2] == +this.text3.text) {
+                this.pontos = this.pontos +1;
+                this.score.setText("Score: " + this.pontos);
+                this.proximaRodada();
+            }
+        }, this);
+
+        this.bottomButtom1.events.onInputDown.add(function() {
+            this.setTexto1(1);
+        }, this);
+
+        this.upperbutton1.events.onInputDown.add(function() {
+            this.setTexto1(0);
+        }, this);
+
+
+        this.bottomButtom2.events.onInputDown.add(function() {
+            this.setTexto2(1);
+        }, this);
+
+        this.upperbutton2.events.onInputDown.add(function() {
+            this.setTexto2(0);
+        }, this);
+
+
+        this.bottomButtom3.events.onInputDown.add(function() {
+            this.setTexto3(1);
+        }, this);
+
+        this.upperbutton3.events.onInputDown.add(function() {
+            this.setTexto3(0);
+        }, this);
+
+
+        this.text1 = this.game.add.text(wField +15, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.text2 = this.game.add.text(wField +260, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.text3 = this.game.add.text(wField +510, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+
+        this.score = this.game.add.text(300, 0 , "0", { font: "70px Arial", fill: "#ff0044", align: "center" });
+        this.score.setText("Score: " + this.pontos);
+
+        this.esquerdoField.inputEnabled = true;
+        this.meioField.inputEnabled = true;
+        this.direitoField.inputEnabled = true;
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -198,10 +226,11 @@ class SimpleGame {
         this.game.input.addPointer();
         this.game.input.addPointer();
 
-        var a = this.getRandomSetParaImprimirNaTela(2);
-        var centena = a[0][0];
-        var dezena = a[0][1];
-        var unidade = a[0][2];
+        this.questoes = this.getRandomSetParaImprimirNaTela(2);
+        this.atual = 0;
+        var centena = this.questoes[0][0];
+        var dezena = this.questoes[0][1];
+        var unidade = this.questoes[0][2];
         this.criarBolinhasNaTela(centena, dezena, unidade);
 
         if (this.espelhar) { // espelhar
@@ -215,8 +244,6 @@ class SimpleGame {
             // this.d.angle = 0;
             // this.game.world.setBounds(100, 100, 2000, 2000);
         }
-
-        this.criarBotoesDeIncremento();
     }
 
     update() {
@@ -263,10 +290,10 @@ class SimpleGame {
     shakeBox() {
         console.log('shakeBox');
         this.game.add.tween(this.box)
-        .to( { x:this.box.x+10 }, 100, null, true, 0)
-        .to( { x:this.box.x-10 }, 100, null, true, 0)
-        .to( { x:this.box.x+10 }, 100, null, true, 0)
-        .to( { x:this.box.x-10 }, 100, null, true, 0);
+            .to( { x:this.box.x+10 }, 100, null, true, 0)
+            .to( { x:this.box.x-10 }, 100, null, true, 0)
+            .to( { x:this.box.x+10 }, 100, null, true, 0)
+            .to( { x:this.box.x-10 }, 100, null, true, 0);
     }
 
     getRandomSetParaImprimirNaTela(qtdRodadas: number) {
@@ -301,14 +328,36 @@ class SimpleGame {
         }
         return listaRetornaRandomicos;
     }
+    proximaRodada() {
+        for(var i = 0; i < this.centena.length; i++){
+            this.centena[i].kill();
+        }
+        this.centena = [];
+        this.atual = this.atual+1
+        if(this.atual > (this.questoes.length - 1)){
+            this.fim = this.game.add.sprite(0, 0, 'fim');
+            this.game.world.bringToTop(this.fim);
+
+        }else {
+
+            this.text1.setText("0");
+            this.text2.setText("0");
+            this.text3.setText("0");
+
+            var centena = this.questoes[this.atual][0];
+            var dezena = this.questoes[this.atual][1];
+            var unidade = this.questoes[this.atual][2];
+            this.criarBolinhasNaTela(centena, dezena, unidade);
+        }
+    }
 
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
 
         var centralizarNoCubo = 90;
-        var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 30;
+        var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
         var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
 
-        var espacoColunas = 85;
+        var espacoColunas = 75;
 
         var w, h, x = 0;
         var y = fixedY;
@@ -381,6 +430,7 @@ class ManagerGames {
     list:Array<SimpleGame> = [];
 
     start() {
+        console.log('start');
         for (let g of this.list) {
             g.fadeBox();
             g.startTimer();
@@ -396,6 +446,7 @@ class ManagerGames {
     }
 
     load() {
+        console.log('load');
         switch (this.numInstances) {
             case 1:
                 this.list.push(new SimpleGame(this.w, this.h, false));

@@ -29,13 +29,6 @@ var SimpleGame = (function () {
     SimpleGame.prototype.startTimer = function () {
         console.log('start timer');
         this.timer.start();
-        this.enviar.inputEnabled = true;
-        this.bottomButtom1.inputEnabled = true;
-        this.upperbutton1.inputEnabled = true;
-        this.bottomButtom2.inputEnabled = true;
-        this.upperbutton3.inputEnabled = true;
-        this.bottomButtom3.inputEnabled = true;
-        this.upperbutton2.inputEnabled = true;
     };
     SimpleGame.prototype.setTexto1 = function (d) {
         if (d == 0 && +this.text1.text == 9) {
@@ -107,6 +100,13 @@ var SimpleGame = (function () {
         this.bottomButtom3 = this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
         this.upperbutton3 = this.game.add.sprite(wField + 625, hField + 15, 'upperbutton');
         this.enviar = this.game.add.sprite(w, 0, 'enviar');
+        this.enviar.inputEnabled = true;
+        this.bottomButtom1.inputEnabled = true;
+        this.upperbutton1.inputEnabled = true;
+        this.bottomButtom2.inputEnabled = true;
+        this.upperbutton3.inputEnabled = true;
+        this.bottomButtom3.inputEnabled = true;
+        this.upperbutton2.inputEnabled = true;
         this.enviar.events.onInputDown.add(function () {
             if (this.questoes[this.atual][0] == +this.text1.text &&
                 this.questoes[this.atual][1] == +this.text2.text &&
