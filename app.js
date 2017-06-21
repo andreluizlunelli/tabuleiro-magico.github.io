@@ -4,6 +4,7 @@ var SimpleGame = (function () {
         this.centena = [];
         this.dezena = [];
         this.unidade = [];
+        this.questoes = [];
         this.w = width;
         this.h = height;
         this.game = new Phaser.Game(width, height, Phaser.AUTO, "content", this);
@@ -18,6 +19,7 @@ var SimpleGame = (function () {
         this.game.load.image("field", "assets/field.png");
         this.game.load.image("bottomButtom", "assets/bottomButtom.png");
         this.game.load.image("upperbutton", "assets/upperbutton.png");
+        this.game.load.image("enviar", "assets/field.png");
     };
     SimpleGame.prototype.endTimer = function () {
         console.log('stop timer');
@@ -70,6 +72,7 @@ var SimpleGame = (function () {
         }
     };
     SimpleGame.prototype.create = function () {
+        this.pontos = 0;
         this.back = this.game.add.sprite(0, 0, 'back');
         this.back.width = 1920;
         this.back.height = 1080;
@@ -95,33 +98,46 @@ var SimpleGame = (function () {
         this.upperbutton2 = this.game.add.sprite(wField + 375, hField + 15, 'upperbutton');
         this.bottomButtom3 = this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
         this.upperbutton3 = this.game.add.sprite(wField + 625, hField + 15, 'upperbutton');
+        this.enviar = this.game.add.sprite(w, 0, 'enviar');
+        this.enviar.inputEnabled = true;
         this.bottomButtom1.inputEnabled = true;
+        this.upperbutton1.inputEnabled = true;
+        this.bottomButtom2.inputEnabled = true;
+        this.upperbutton3.inputEnabled = true;
+        this.bottomButtom3.inputEnabled = true;
+        this.upperbutton2.inputEnabled = true;
+        this.enviar.events.onInputDown.add(function () {
+            if (this.questoes[this.atual][0] == +this.text1.text &&
+                this.questoes[this.atual][1] == +this.text2.text &&
+                this.questoes[this.atual][2] == +this.text3.text) {
+                this.pontos = this.pontos + 1;
+                this.score.setText("Score: " + this.pontos);
+                this.proximaRodada();
+            }
+        }, this);
         this.bottomButtom1.events.onInputDown.add(function () {
             this.setTexto1(1);
         }, this);
-        this.upperbutton1.inputEnabled = true;
         this.upperbutton1.events.onInputDown.add(function () {
             this.setTexto1(0);
         }, this);
-        this.bottomButtom2.inputEnabled = true;
         this.bottomButtom2.events.onInputDown.add(function () {
             this.setTexto2(1);
         }, this);
-        this.upperbutton2.inputEnabled = true;
         this.upperbutton2.events.onInputDown.add(function () {
             this.setTexto2(0);
         }, this);
-        this.bottomButtom3.inputEnabled = true;
         this.bottomButtom3.events.onInputDown.add(function () {
             this.setTexto3(1);
         }, this);
-        this.upperbutton3.inputEnabled = true;
         this.upperbutton3.events.onInputDown.add(function () {
             this.setTexto3(0);
         }, this);
         this.text1 = this.game.add.text(wField + 15, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text2 = this.game.add.text(wField + 260, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text3 = this.game.add.text(wField + 510, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.score = this.game.add.text(300, 0, "0", { font: "70px Arial", fill: "#ff0044", align: "center" });
+        this.score.setText("Score: " + this.pontos);
         this.esquerdoField.inputEnabled = true;
         this.meioField.inputEnabled = true;
         this.direitoField.inputEnabled = true;
@@ -133,21 +149,13 @@ var SimpleGame = (function () {
         this.game.input.addPointer();
         this.game.input.addPointer();
         this.game.input.addPointer();
-        var a = this.getRandomSetParaImprimirNaTela(2);
-        var centena = a[0][0];
-        var dezena = a[0][1];
-        var unidade = a[0][2];
+        this.questoes = this.getRandomSetParaImprimirNaTela(2);
+        this.atual = 0;
+        var centena = this.questoes[0][0];
+        var dezena = this.questoes[0][1];
+        var unidade = this.questoes[0][2];
         this.criarBolinhasNaTela(centena, dezena, unidade);
         if (this.espelhar) {
-            // ISSO AQUI FUNCIONA não apagar
-            // var g = this.game.add.group();
-            // g.x = 500;
-            //
-            // this.d = g.create(100, 300, 'content');
-            // this.d.anchor.setTo(0, 0);
-            //
-            // this.d.angle = 0;
-            // this.game.world.setBounds(100, 100, 2000, 2000);
         }
     };
     SimpleGame.prototype.update = function () {
@@ -225,6 +233,21 @@ var SimpleGame = (function () {
             listaRetornaRandomicos.push(item);
         }
         return listaRetornaRandomicos;
+    };
+    SimpleGame.prototype.proximaRodada = function () {
+        for (var i = 0; i < this.centena.length; i++) {
+            this.centena[i].kill();
+        }
+        this.centena = [];
+        this.atual = this.atual + 1;
+        if (this.atual > this.questoes.length) {
+        }
+        else {
+            var centena = this.questoes[this.atual][0];
+            var dezena = this.questoes[this.atual][1];
+            var unidade = this.questoes[this.atual][2];
+            this.criarBolinhasNaTela(centena, dezena, unidade);
+        }
     };
     SimpleGame.prototype.criarBolinhasNaTela = function (centena, dezena, unidade) {
         var centralizarNoCubo = 90;

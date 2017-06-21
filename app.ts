@@ -16,11 +16,15 @@ class SimpleGame {
     game: Phaser.Game;
     cursors: Phaser.CursorKeys;
 
+    pontos: number;
+    atual: number;
+
     back: Phaser.Sprite;
     box: Phaser.Sprite;
     esquerdoField : Phaser.Sprite;
     direitoField : Phaser.Sprite;
     meioField : Phaser.Sprite;
+    enviar: Phaser.Sprite;
     bottomButtom1: Phaser.Sprite;
     upperbutton1: Phaser.Sprite;
     bottomButtom2: Phaser.Sprite;
@@ -43,12 +47,17 @@ class SimpleGame {
     dezena: Array<Phaser.Sprite> = [];
     unidade: Array<Phaser.Sprite> = [];
 
+
+    questoes: Array<number> = [];
+
     timer: Phaser.Timer;
     timerEvent: Phaser.TimerEvent;
 
     text1 : Phaser.Text;
     text2 : Phaser.Text;
     text3 : Phaser.Text;
+
+    score : Phaser.Text;
 
     preload() {
         this.game.load.image("back", "assets/back.png");
@@ -59,6 +68,7 @@ class SimpleGame {
         this.game.load.image("field", "assets/field.png");
         this.game.load.image("bottomButtom", "assets/bottomButtom.png");
         this.game.load.image("upperbutton", "assets/upperbutton.png");
+        this.game.load.image("enviar", "assets/field.png");
     }
 
     endTimer() {
@@ -109,6 +119,7 @@ class SimpleGame {
 
 
     create() {
+        this.pontos = 0;
 
         this.back = this.game.add.sprite(0, 0, 'back');
         this.back.width = 1920;
@@ -144,29 +155,48 @@ class SimpleGame {
         this.bottomButtom3 =  this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
         this.upperbutton3 =  this.game.add.sprite(wField + 625, hField +15, 'upperbutton');
 
+        this.enviar =  this.game.add.sprite(w, 0 , 'enviar');
+
+        this.enviar.inputEnabled = true;
         this.bottomButtom1.inputEnabled = true;
+        this.upperbutton1.inputEnabled = true;
+        this.bottomButtom2.inputEnabled = true;
+        this.upperbutton3.inputEnabled = true;
+        this.bottomButtom3.inputEnabled = true;
+        this.upperbutton2.inputEnabled = true;
+
+        this.enviar.events.onInputDown.add(function() {
+          if(this.questoes[this.atual][0] == +this.text1.text &&
+              this.questoes[this.atual][1] == +this.text2.text &&
+              this.questoes[this.atual][2] == +this.text3.text) {
+                  this.pontos = this.pontos +1;
+                  this.score.setText("Score: " + this.pontos);
+                  this.proximaRodada();
+          }
+        }, this);
+
         this.bottomButtom1.events.onInputDown.add(function() {
           this.setTexto1(1);
         }, this);
-        this.upperbutton1.inputEnabled = true;
+
         this.upperbutton1.events.onInputDown.add(function() {
           this.setTexto1(0);
         }, this);
 
-        this.bottomButtom2.inputEnabled = true;
+
         this.bottomButtom2.events.onInputDown.add(function() {
           this.setTexto2(1);
         }, this);
-        this.upperbutton2.inputEnabled = true;
+
         this.upperbutton2.events.onInputDown.add(function() {
           this.setTexto2(0);
         }, this);
 
-        this.bottomButtom3.inputEnabled = true;
+
         this.bottomButtom3.events.onInputDown.add(function() {
           this.setTexto3(1);
         }, this);
-        this.upperbutton3.inputEnabled = true;
+
         this.upperbutton3.events.onInputDown.add(function() {
           this.setTexto3(0);
         }, this);
@@ -175,6 +205,9 @@ class SimpleGame {
         this.text1 = this.game.add.text(wField +15, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text2 = this.game.add.text(wField +260, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.text3 = this.game.add.text(wField +510, hField +10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+
+        this.score = this.game.add.text(300, 0 , "0", { font: "70px Arial", fill: "#ff0044", align: "center" });
+        this.score.setText("Score: " + this.pontos);
 
         this.esquerdoField.inputEnabled = true;
         this.meioField.inputEnabled = true;
@@ -191,10 +224,11 @@ class SimpleGame {
         this.game.input.addPointer();
         this.game.input.addPointer();
 
-        var a = this.getRandomSetParaImprimirNaTela(2);
-        var centena = a[0][0];
-        var dezena = a[0][1];
-        var unidade = a[0][2];
+        this.questoes = this.getRandomSetParaImprimirNaTela(2);
+        this.atual = 0;
+        var centena = this.questoes[0][0];
+        var dezena = this.questoes[0][1];
+        var unidade = this.questoes[0][2];
         this.criarBolinhasNaTela(centena, dezena, unidade);
 
         if (this.espelhar) { // espelhar
@@ -291,6 +325,21 @@ class SimpleGame {
             listaRetornaRandomicos.push(item);
         }
         return listaRetornaRandomicos;
+    }
+    proximaRodada() {
+      for(var i = 0; i < this.centena.length; i++){
+        this.centena[i].kill();
+      }
+      this.centena = [];
+      this.atual = this.atual+1
+      if(this.atual > this.questoes.length){
+        //TODO terminar jogo
+      }else {
+        var centena = this.questoes[this.atual][0];
+        var dezena = this.questoes[this.atual][1];
+        var unidade = this.questoes[this.atual][2];
+        this.criarBolinhasNaTela(centena, dezena, unidade);
+      }
     }
 
     criarBolinhasNaTela(centena:number, dezena:number, unidade:number) {
