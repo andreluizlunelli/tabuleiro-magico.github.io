@@ -69,32 +69,21 @@ var SimpleGame = (function () {
             this.text3.setText("" + (+this.text3.text - 1));
         }
     };
-    SimpleGame.prototype.create = function () {
-        this.back = this.game.add.sprite(0, 0, 'back');
-        this.back.width = 1920;
-        this.back.height = 1080;
-        this.texto1 = 0;
-        this.texto2 = 0;
-        this.texto3 = 0;
-        this.timer = this.game.time.create();
-        this.timerEvent = this.timer.add(Phaser.Timer.MINUTE * 0.5, this.endTimer, this);
-        this.game.stage.backgroundColor = "#FFF";
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        // tamanho box 256x256
-        var w = (this.game.world.width / 2) - 128; // 128
-        var h = (this.game.world.height / 2) - 128; // 128
-        var wField = (this.game.world.height / 2) + 100; // 128
-        var hField = (this.game.world.height / 2) + 200; // 128
-        this.box = this.game.add.sprite(w, h, 'box');
-        this.esquerdoField = this.game.add.sprite(wField, hField, 'field');
-        this.meioField = this.game.add.sprite(wField + 250, hField, 'field');
-        this.direitoField = this.game.add.sprite(wField + 500, hField, 'field');
-        this.bottomButtom1 = this.game.add.sprite(wField + 125, hField + 45, 'bottomButtom');
-        this.upperbutton1 = this.game.add.sprite(wField + 125, hField + 15, 'upperbutton');
-        this.bottomButtom2 = this.game.add.sprite(wField + 375, hField + 45, 'bottomButtom');
-        this.upperbutton2 = this.game.add.sprite(wField + 375, hField + 15, 'upperbutton');
-        this.bottomButtom3 = this.game.add.sprite(wField + 625, hField + 45, 'bottomButtom');
-        this.upperbutton3 = this.game.add.sprite(wField + 625, hField + 15, 'upperbutton');
+    SimpleGame.prototype.criarBotoesDeIncremento = function () {
+        var wField = (this.game.world.width / 2) - 101;
+        var hField = (this.game.world.height / 2) + 90;
+        // let wField2 = ((wField*35)/100);
+        // let hField2 = (hField/2+hField)+50;
+        // let marginField = 10 + 202; // margem + tamanho da largura da imagem
+        // this.esquerdoField =  this.game.add.sprite(wField2, hField2, 'field');
+        // this.meioField =  this.game.add.sprite(wField2+marginField, hField2, 'field');
+        // this.direitoField =  this.game.add.sprite(wField2+marginField+marginField, hField2, 'field');
+        this.bottomButtom1 = this.game.add.sprite(wField + 19, hField + 50, 'bottomButtom');
+        this.upperbutton1 = this.game.add.sprite(wField + 19, hField + 20, 'upperbutton');
+        this.bottomButtom2 = this.game.add.sprite(wField + 120, hField + 50, 'bottomButtom');
+        this.upperbutton2 = this.game.add.sprite(wField + 120, hField + 20, 'upperbutton');
+        this.bottomButtom3 = this.game.add.sprite(wField + 220, hField + 50, 'bottomButtom');
+        this.upperbutton3 = this.game.add.sprite(wField + 220, hField + 20, 'upperbutton');
         this.bottomButtom1.inputEnabled = true;
         this.bottomButtom1.events.onInputDown.add(function () {
             this.setTexto1(1);
@@ -119,12 +108,28 @@ var SimpleGame = (function () {
         this.upperbutton3.events.onInputDown.add(function () {
             this.setTexto3(0);
         }, this);
-        this.text1 = this.game.add.text(wField + 15, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
-        this.text2 = this.game.add.text(wField + 260, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
-        this.text3 = this.game.add.text(wField + 510, hField + 10, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.text1 = this.game.add.text(wField - 20, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.text2 = this.game.add.text(wField + 85, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
+        this.text3 = this.game.add.text(wField + 180, hField + 15, "0", { font: "65px Arial", fill: "#ff0044", align: "center" });
         this.esquerdoField.inputEnabled = true;
         this.meioField.inputEnabled = true;
         this.direitoField.inputEnabled = true;
+    };
+    SimpleGame.prototype.create = function () {
+        this.back = this.game.add.sprite(0, 0, 'back');
+        this.back.width = 1920;
+        this.back.height = 1080;
+        this.texto1 = 0;
+        this.texto2 = 0;
+        this.texto3 = 0;
+        this.timer = this.game.time.create();
+        this.timerEvent = this.timer.add(Phaser.Timer.MINUTE * 0.5, this.endTimer, this);
+        this.game.stage.backgroundColor = "#FFF";
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        // tamanho box 256x256
+        var w = (this.game.world.width / 2) - 128; // 128
+        var h = (this.game.world.height / 2) - 128; // 128
+        this.box = this.game.add.sprite(w, h, 'box');
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.counter = 0;
         this.step = Math.PI * 2 / 360;
@@ -149,6 +154,7 @@ var SimpleGame = (function () {
             // this.d.angle = 0;
             // this.game.world.setBounds(100, 100, 2000, 2000);
         }
+        this.criarBotoesDeIncremento();
     };
     SimpleGame.prototype.update = function () {
         var tStep = Math.sin(this.counter);
@@ -228,9 +234,9 @@ var SimpleGame = (function () {
     };
     SimpleGame.prototype.criarBolinhasNaTela = function (centena, dezena, unidade) {
         var centralizarNoCubo = 90;
-        var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 10;
+        var fixedY = ((this.game.world.height / 2) - centralizarNoCubo) + 30;
         var colunaBolinhasX = (this.game.world.width / 2) - centralizarNoCubo;
-        var espacoColunas = 75;
+        var espacoColunas = 85;
         var w, h, x = 0;
         var y = fixedY;
         var b;
@@ -287,7 +293,6 @@ var ManagerGames = (function () {
         this.h = h;
     }
     ManagerGames.prototype.start = function () {
-        console.log('start');
         for (var _i = 0, _a = this.list; _i < _a.length; _i++) {
             var g = _a[_i];
             g.fadeBox();
@@ -303,7 +308,6 @@ var ManagerGames = (function () {
         });
     };
     ManagerGames.prototype.load = function () {
-        console.log('load');
         switch (this.numInstances) {
             case 1:
                 this.list.push(new SimpleGame(this.w, this.h, false));
